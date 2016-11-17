@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>铁塔选址后台---山东百传网络</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.dfinput {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px
+}
+
+select {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+.select_mag{
+    margin-right: 0px
+}
+</style>
+</head>
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="#">功能菜单</a></li>
+			<li><a href="#">订单管理</a></li>
+			<li><a href="#">订单管理</a></li>
+		</ul>
+	</div>
+
+	<div class="rightinfo">
+  	<form id="form_order" action="order.html" method="post" >
+		<div class="tools">
+		
+			<ul class="tools">
+				<li>
+				下单人姓名： <input type="text" name="parameter.username"  value="${(orderPage.parameter.username)!!}"  class="dfinput" />
+				        手机号： <input type="text" name="parameter.usertele" value="${(orderPage.parameter.usertele)!!}" class="dfinput" />
+				     站址名称：<input type="text" name="parameter.towername" value="${(orderPage.parameter.towername)!!}" class="dfinput" />
+					站点区域： <select id="tower_city" class="select_mag" name="parameter.towercity" onchange="tower_city_change()">
+					 <#if ((orderPage.towercitys)?size!=1)>
+					
+					  <option value=""  <#if (orderPage.parameter.towercity=='') >selected="selected"</#if>>全部</option>
+					 </#if>
+					 <#list orderPage.towercitys as city>
+					  <option value="${city.cityid}"  <#if (orderPage.parameter.towercity==city.cityid) >selected="selected"</#if>>${city.cityname}</option>
+					   
+					 </#list>
+						  
+				      </select>
+				          <select id="tower_area" name="parameter.towerarea">
+						 <#if ((orderPage.towerareas)?size!=1)>
+					          <option value="0" <#if (orderPage.parameter.towerarea==0) >selected="selected"</#if>>全部</option>
+					     </#if>
+					      <#list orderPage.towerareas as area>
+					         <option value="${area.id}" <#if (orderPage.parameter.towerarea==area.id) >selected="selected"</#if>>${area.areaname}</option>
+					       </#list>
+				          </select>
+				          
+				</li>
+				<br />
+					<li>状态： <select name="parameter.towerstate">
+							<option value="-1" <#if (orderPage.parameter.towerstate==0) >selected="selected"</#if>>所有</option>
+							<option value="0" <#if (orderPage.parameter.towerstate==0) >selected="selected"</#if>>抢单</option>
+							<option value="1" <#if (orderPage.parameter.towerstate==1) >selected="selected"</#if>>弃单</option>
+							<option value="2" <#if (orderPage.parameter.towerstate==2) >selected="selected"</#if>>交单</option>
+							<option value="3" <#if (orderPage.parameter.towerstate==3) >selected="selected"</#if>>审核拒绝(签约)</option>
+							<option value="4" <#if (orderPage.parameter.towerstate==4) >selected="selected"</#if>>审核成功(签约)</option>
+							<option value="5" <#if (orderPage.parameter.towerstate==5) >selected="selected"</#if>> 付首款审核中</option>
+							<option value="6" <#if (orderPage.parameter.towerstate==6) >selected="selected"</#if>>付首款审核成功</option>
+							<option value="7" <#if (orderPage.parameter.towerstate==7) >selected="selected"</#if>>付首款审核拒绝</option>
+							<option value="8" <#if (orderPage.parameter.towerstate==8) >selected="selected"</#if>>付尾款审核中</option>
+							<option value="9" <#if (orderPage.parameter.towerstate==9) >selected="selected"</#if>>付尾款审核成功</option>
+							<option value="10" <#if (orderPage.parameter.towerstate==10) >selected="selected"</#if>>付尾款审核拒绝</option>
+							<option value="11" <#if (orderPage.parameter.towerstate==11) >selected="selected"</#if>>超时过期</option>
+							<option value="12" <#if (orderPage.parameter.towerstate==12) >selected="selected"</#if>>延期</option>
+					<option value="13" <#if (orderPage.parameter.towerstate==13) >selected="selected"</#if>>延期申请中</option>
+					<option value="14" <#if (orderPage.parameter.towerstate==14) >selected="selected"</#if>>延期拒绝</option>
+					</select> 用户区域： <select class="select_mag" id="user_city" name="parameter.usercity" onchange="user_city_change()">
+							 <#if ((orderPage.usercitys)?size!=1)>
+					
+					         <option value=""  <#if (orderPage.parameter.towercity=='') >selected="selected"</#if>>全部</option>
+					       </#if>
+					         <#list orderPage.usercitys as city>
+					         <option value="${city.cityid}"  <#if (orderPage.parameter.usercity==city.cityid) >selected="selected"</#if>>${city.cityname}</option>
+					       </#list>
+						  
+					</select>
+							 <select id="user_area" name="parameter.userarea">
+						 <#if ((orderPage.userareas)?size!=1)>
+					          <option value="0" <#if (orderPage.parameter.userarea==0) >selected="selected"</#if>>全部</option>
+					     </#if>
+					      <#list orderPage.userareas as area>
+					         <option value="${area.id}" <#if (orderPage.parameter.userarea==area.id) >selected="selected"</#if>>${area.areaname}</option>
+					       </#list>
+				          </select>
+					</select> 下单日期： <input type="text" name="parameter.toweraddtimestart" class="dfinput" value="${(orderPage.parameter.toweraddtimestart)!!}"
+						style="margin-right: 5px"
+						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2014-12-01'})" />
+						<label>~</label> <input type="text" id="" class="dfinput" name="parameter.toweraddtimeend" value="${(orderPage.parameter.toweraddtimeend)!!}"
+						style="margin-right: 5px"
+						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2014-12-01'})" />
+						<input type="submit" class="sure" style="margin-left: 50px"
+						value="查询" /> <input type="button" class="sure" onclick="dc_orders()"
+						style="margin-left: 50px" value="导出" />
+
+					</li>
+
+				</ul>
+		
+		</div>
+
+
+
+		<table class="tablelist">
+			<thead>
+				<tr>
+					<th>下单人姓名</th>
+					<th>手机号</th>
+					<th>站点名称</th>
+					<th>站址城市</th>
+					<th>站址地区</th>
+					<th>订单状态</th>
+					<th>谈址费（元）</th>
+					<th>下单时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+    			<#list orderPage.orders as order>
+				<tr>
+					<td>${order.username}</td>
+					<td>${order.usertele}</td>
+					<td>${order.towername}</td>
+					<td>${order.towercityname}</td>
+					<td>${order.towerareaname}</td>
+					<td>${order.towerstatename}</td>
+					<td>${order.towerfee}</td>
+					<td>${order.toweraddtime}</td>
+					
+					<td>
+					<#switch order.towerstate>
+					  <#case 0>
+					  <a href="order_info.html?orderid=${order.id}" class="tablelink">审核</a>
+					    <#break>  
+					  <#case 1>
+					  <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a> 
+					    <#break>  
+					  <#case 2>
+					
+					   <a href="order_info.html?orderid=${order.id}" class="tablelink">审核</a>
+					
+					   <#break>  
+					  <#case 3>
+					  <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a> 
+					    <#break>  
+					  <#case 4>
+					  <a href="order_info.html?orderid=${order.id}" class="tablelink">提交付首款申请</a>
+					     <a href="#" onclick="shjj_show(${order.id})"  class="tablelink" style="margin-left: 4px">审核拒绝</a> 
+					    <#break>  
+					  <#case 5>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a>
+					    <#break>  
+					  <#case 6>
+					     <a href="order_info.html?orderid=${order.id}" class="tablelink">提交付尾款申请</a>
+					    <#break> 
+					  <#case 7>
+					   <a href="order_info.html?orderid=${order.id}" class="tablelink">提交付首款申请</a>
+					       <a href="#" onclick="shjj_show(${order.id})"  class="tablelink" style="margin-left: 4px">审核拒绝</a> 
+					    <#break>  
+					  <#case 8>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a>
+					    <#break>  
+					  <#case 9>
+					  <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a> 
+					    <#break>  					     
+					  <#case 10>
+					   <a href="order_info.html?orderid=${order.id}" class="tablelink">提交付尾款申请</a>
+					    <#break>  
+					  <#case 11>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">查看</a> 
+					    <#break>  
+					  <#case 12>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">审核</a>
+					    <#break>  
+					  <#case 13>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">审核    </a>
+					       
+					    <#break>  
+					   <#case 14>
+					    <a href="order_info.html?orderid=${order.id}" class="tablelink">审核    </a>
+					       
+					    <#break>  
+					    					    					    					    					    
+					</#switch>
+					</td>
+					
+					
+				</tr>
+				</#list>
+
+			</tbody>
+		</table>
+
+
+		<div class="pagin" style="width: 100%">
+
+			<table>
+				<tr>
+					<td  style="vertical-align: top;">
+					</td>
+					<td>
+					</td>
+					<td>
+					<div class="pagin">
+					${orderPage.pageinfo.pagecount}
+				
+					</td>
+					<td>
+						<ul class="paginList" style="margin-top: 10px">
+							${orderPage.pageinfo.page}
+						</ul>
+					</td>
+				</tr>
+			</table>
+			<div class="message"></div>
+
+		</div>
+		<input  type="hidden" id="pageno" value="${orderPage.pageno}" name="pageno"/>
+
+	</form>
+		<div class="tip" id="tip">
+			<div class="tiptop">
+				<span>提示信息</span><a></a>
+			</div>
+
+			<div class="tipinfo">
+				<span><img src="../assets/images/ticon.png" /></span>
+				<div class="tipright">
+					<p>是否确认审核拒绝 ？</p>
+					<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+				</div>
+			</div>
+
+			<div class="tipbtn">
+				<input name="" type="button" onclick="shjj()" class="sure" value="确定" />&nbsp; <input
+					name="" type="button" class="cancel" value="取消" />
+			</div>
+
+		</div>
+	
+
+
+
+
+
+	</div>
+	
+	<input  type="hidden" id="select_order_id"/>
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script type="text/javascript"
+		src="../assets/plugins/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../assets/js/page/common/area.js"></script>
+			<script type="text/javascript" src="../assets/js/page/hbtower/order.js"></script>
+	<script type="text/javascript">
+	
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+	<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+
+
+	
+
+
+</body>
+</html>

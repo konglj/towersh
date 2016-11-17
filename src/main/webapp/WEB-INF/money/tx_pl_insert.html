@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">功能菜单</a></li>
+    <li><a href="#">提现管理</a></li>
+    <li><a href="#">提现管理</a></li>
+    </ul>
+    </div>
+   <br />
+     <br />
+     <br />
+     <form id="form_all_add"  method="post"  enctype="multipart/form-data">
+     <div class="formtext">请先在提现页面中，导出审核通过，未打款的数据，在导出的文件中完成信息填写及导入.&nbsp;&nbsp;&nbsp;&nbsp;注意：打款失败的，银行单号请用AB000000来代替。</div>
+    <ul class="seachform">
+    
+    <li><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择要上传的EXCEL文件：<input type="file" name="file" class="dfinput" height="35px">
+        </label>
+        </li>
+    
+    <li><label>&nbsp;</label> 
+    <input type="button" class="scbtn" value="批量上传" onclick="pldr()">
+   
+    </ul>
+    
+    </div>  
+     </form>
+     	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+     	<script type="text/javascript" src="../assets/js/jquery.form.js"></script>
+     <script type="text/javascript" src="../assets/js/page/money/money.js"></script>
+     
+</body>
+</html>

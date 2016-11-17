@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.ManagerMapper">
+
+	<select id="getManagerPowers" resultType="com.tower.common.bean.ManagerPower">
+		select
+		ID as id,
+		Power_name as powerName,
+		Power_w as powerQx
+		from tower_power;
+	</select>
+
+	<select id="getAdmins" parameterType="com.tower.common.bean.ManagerPage"
+		resultType="com.tower.common.bean.AdminManagerInfo">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY adddate desc) as rank from(
+		select
+		a.ID as id,
+		a.Admin_id as adminid,
+		a.Admin_name as adminname,
+		a.Admin_power as adminpower,
+		a.Admin_is_bind as adminisbind,
+		p.Power_name as adminpowerName,
+
+		a.Admin_wxid as wxid,
+		u.Wx_name as wxname,
+		u.User_tele as wxphone,
+        CONVERT(varchar,
+		a.Admin_add_time, 120 ) as adddate
+
+		from tower_admin a
+		left join tower_user_info u on
+		u.Wx_id = a.Admin_wxid
+		left join tower_power p on
+		a.Admin_power = p.ID
+
+		where 1=1
+		<!-- admin start -->
+		
+		<!-- admin end -->
+
+		<if test="queryItem.adminId!=null and queryItem.adminId!='' ">
+			and a.Admin_id like '%${queryItem.adminId}%'
+		</if>
+
+		<if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and a.Admin_name like '%${queryItem.adminName}%'
+		</if>
+
+		<if test="queryItem.cityId!=null and queryItem.cityId!='' ">
+			and charindex(',' + convert(varchar(10),#{queryItem.cityId}) + ',' ,
+			',' + a.Admin_Area_city + ',')>0
+		</if>
+
+
+		<if test="queryItem.adminPower!=null and queryItem.adminPower!=0 ">
+			and a.Admin_power = #{queryItem.adminPower}
+		</if>
+
+		<if test="queryItem.adminPhone!=null and queryItem.adminPhone!='' ">
+			and u.User_tele like '%${queryItem.adminPhone}%'
+		</if>
+		 )w1)as tmp where tmp.rank between #{pageNo}*10-9 and #{pageNo}*10
+	  
+
+	</select>
+
+	<select id="getSysUsersCount" parameterType="com.tower.common.bean.ManagerPage"
+		resultType="int">
+		select
+		count(1)
+		
+		from tower_admin a
+		left join tower_user_info u on
+		u.Wx_id = a.Admin_wxid
+		left join tower_power p on
+		a.Admin_power = p.ID
+
+		where 1=1
+		<!-- admin start -->
+		
+		<!-- admin end -->
+
+		<if test="queryItem.adminId!=null and queryItem.adminId!='' ">
+			and a.Admin_id like '%${queryItem.adminId}%'
+		</if>
+
+		<if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and a.Admin_name like '%${queryItem.adminName}%'
+		</if>
+
+		<if test="queryItem.cityId!=null and queryItem.cityId!='' ">
+			and charindex(',' + convert(varchar(10),#{queryItem.cityId}) + ',' ,
+			',' + a.Admin_Area_city + ',')>0
+		</if>
+
+
+		<if test="queryItem.adminPower!=null and queryItem.adminPower!=0 ">
+			and a.Admin_power = #{queryItem.adminPower}
+		</if>
+
+		<if test="queryItem.adminPhone!=null and queryItem.adminPhone!='' ">
+			and u.User_tele like '%${queryItem.adminPhone}%'
+		</if>
+	  
+	</select>
+
+	<select id="getAdmin" parameterType="int"
+		resultType="com.tower.common.bean.AdminManagerInfo">
+		select
+		a.ID as id,
+		a.Admin_id as adminid,
+		a.Admin_name as adminname,
+		a.Admin_power
+		as adminpower,
+		p.Power_name as adminpowerName,
+		a.Admin_area as
+		adminarea,
+		a.Admin_Area_city as adminareacity,
+		a.Admin_wxid as wxid,
+		u.Wx_name as wxname,
+		u.User_tele as wxphone,
+		CONVERT(varchar,
+		a.Admin_add_time, 120 ) as adddate
+		from tower_admin a
+		left join tower_user_info u on
+		u.Wx_id = a.Admin_wxid
+		left join tower_power p on
+		a.Admin_power = p.ID
+		where
+		a.ID = #{ID}
+	</select>
+
+	<update id="changeAdmin" parameterType="map">
+		update tower_admin
+		set Admin_name=#{adminname},
+		Admin_power=#{adminpower},
+		Admin_area=#{adminarea},
+		Admin_Area_city=#{adminareacity}
+		where ID = #{id};
+	</update>
+
+	<insert id="addAdmin" parameterType="map">
+		insert into tower_admin
+		(Admin_id,Admin_psd,Admin_power,Admin_area,Admin_name,Admin_wxid,Admin_phone,Admin_is_bind,Admin_Area_city,Admin_add_time)
+		values
+		(#{adminid},'111111',#{adminpower},#{adminarea},#{adminname},null,null,0,#{adminareacity},GETDATE())
+	</insert>
+
+	<update id="changeAdminpwd" parameterType="int">
+		update tower_admin
+		set Admin_psd = '111111'
+		where ID = #{ID};
+	</update>
+
+	<delete id="delAdmin" parameterType="map">
+		delete from tower_admin
+		where 1=1
+		and
+		ID in(
+		<foreach collection="ids" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
+
+	<select id="getChildPowers" parameterType="map"
+		resultType="com.tower.common.bean.Power">
+		select id as id,
+		Power_name as powername,
+		Power_w as powerw
+		from tower_power
+		where 1=1
+		and id!=1
+	
+		order by Power_order asc
+		
+
+
+	</select>
+	
+	<select id="checkAdminidExist" parameterType="String" resultType="int">
+	  select count(1)
+	  from tower_admin
+	  where Admin_id=#{id}
+	  ;
+	</select>
+	
+	<select id="getBindsUsers" parameterType="com.tower.common.bean.BindUserPage" resultType="com.tower.common.bean.BindUser">
+	select * from (select *,ROW_NUMBER() OVER (ORDER BY addtime desc) as rank from(
+	  select 
+	  u.Wx_id as wxid,
+	  u.User_name as username,
+	  u.Wx_name as wxname,
+	  u.User_tele as usertele,
+	  t.Type_name as usertype,
+	  c.City_name as cityname,
+	  CONVERT(varchar,
+		u.Add_time, 120 ) as addtime
+	  from tower_user_info u
+	  left join tower_user_type t on t.ID=u.User_type
+	  left join tower_city c on c.ID=u.User_area
+	  where 1=1
+	  and  u.Wx_id not in(select Admin_wxid from tower_admin where Admin_is_bind=1)
+	  <if test="usertele!=null and usertele!=''">
+	   and u.User_tele like '%${usertele}%'
+	  </if>
+	   <if test="username!=null and username!=''">
+	   and u.User_name like '%${username}%'
+	  </if>
+	 )w1)as tmp where tmp.rank between #{pageno}*10-9 and #{pageno}*10
+	  
+	  
+	  
+	</select>
+	
+	<select id="getBindsUsersCount" parameterType="com.tower.common.bean.BindUserPage" resultType="int">
+	  select count(1)
+	 
+	  from tower_user_info u
+	  left join tower_user_type t on t.ID=u.User_type
+	  left join tower_area r on r.ID=u.User_area
+	  left join tower_city c on c.City_id=r.City_id
+	  where 1=1
+	  and  u.Wx_id not in(select Admin_wxid from tower_admin where Admin_is_bind=1)
+	  <if test="usertele!=null and usertele!=''">
+	   and u.User_tele like '%${usertele}%'
+	  </if>
+	   <if test="username!=null and username!=''">
+	   and u.User_name like '%${username}%'
+	  </if>
+	  
+	  
+	  
+	</select>
+	
+	<update id="bindUser" parameterType="map">
+	  update tower_admin
+	  set Admin_is_bind=1,
+	  Admin_wxid=#{wxid}
+	  where id=#{id}
+	</update>
+	
+	<update id="unBindUser" parameterType="map">
+	  update tower_admin
+	  set Admin_is_bind=0,
+	  Admin_wxid=#{wxid}
+	  where id=#{id}
+	</update>
+	
+	<select id="getAdminWxByArea" parameterType="map"
+		resultType="com.tower.common.bean.SysUserInfo">
+		select 
+		s.Admin_wxid as adminwxid,
+		s.Admin_power as adminpower
+		 from
+		tower_admin s
+		where
+		1=1
+		and s.Admin_is_bind=1
+		and s.Admin_power in (
+		 <foreach collection="powers" item="power" separator=",">
+		  #{power}
+		 </foreach>
+		)
+		and (
+		CHARINDEX(',${city},',','+s.Admin_area_city+',')>0
+		)
+		;
+
+	</select>
+	
+
+</mapper>

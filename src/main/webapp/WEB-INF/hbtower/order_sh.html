@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>订单详情</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+lable {
+	width: 205px;
+}
+</style>
+</head>
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="#">功能菜单</a></li>
+			<li><a href="#">订单管理</a></li>
+			<li><a href="#">订单管理</a></li>
+		</ul>
+	</div>
+
+<form  id="form_order_sh" method="post">
+	<div class="formbody">
+
+		<div class="formtitle">
+			<span>订单基本信息</span>
+		</div>
+
+		<ul class="forminfo">
+			<div>
+				<img alt="" src="../assets/images/qiangdanrenxinxi.png">抢单人信息
+				<div>
+					订单编号: <label>${orderPage.ordertower.orderid}</label>
+				</div>
+				<table align="center" cellpadding="0" cellspacing="0"
+					style="border: 1px solid #FEDCDC; width: 100%; height: 80px;">
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;抢单人姓名：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.username}</label> <asp:Label
+								ID="qname" runat="server" Width="205px"></asp:Label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;抢单人手机号：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.usertele}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;抢单人区域：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.usercityname}-${orderPage.orderuser.userareaname}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;抢单人等级：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.orderuser.userlevel}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;所在单位：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.orderuser.usercompany}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;所属行业：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.orderuser.userbusiness}</label>
+						</td>
+
+					</tr>
+				</table>
+				<div>&nbsp;&nbsp;</div>
+				<div>
+					<img alt="" src="../assets/images/dingdanxinxi.png"> 抢单信息：
+				</div>
+				<table align="center" cellpadding="0" cellspacing="0"
+					style="border: 1px solid #FEDCDC; width: 100%; height: 80px;">
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;抢单数：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.ordercount}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%" Width="205px">
+						&nbsp;&nbsp;成功订单数：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.succcount}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;进行中订单数：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.orderuser.ingcount}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;失败订单数：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.orderuser.failcount}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;撤单数：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.orderuser.cancelcount}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%"></td>
+						<td></td>
+
+					</tr>
+				</table>
+				<div>&nbsp;</div>
+				<div>
+					<img alt="" src="../assets/images/zhanzhixinxi.png"> 站址信息：
+				</div>
+				<table align="center" cellpadding="0" cellspacing="0"
+					style="border: 1px solid #FEDCDC; width: 100%; height: 169px;">
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;站点名称：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towername}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;区域经理联系方式：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towermanagername}-${orderPage.ordertower.towermanager}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;站址地区：</td>
+						<td style="border: 1px solid #FEDCDC; width: 25%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towercityname}-${orderPage.ordertower.towerareaname}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;订单状态：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.ordertower.towerstatename}</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;站址等级：</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.ordertower.towerlevel}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;站型：</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towertypename}</label>
+
+						</td>
+
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;预付款:</td>
+						<td style="border: 1px solid #FEDCDC;">&nbsp;&nbsp;<label>${orderPage.ordertower.towerfirstfee}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;站址描述：</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towerinfo}</label>
+
+						</td>
+
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;谈单费:</td>
+						<td style="border: 1px solid #FEDCDC;">
+						&nbsp;&nbsp;<label>${orderPage.ordertower.towerfee}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;下单日期:</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.toweraddtime}</label>
+
+						</td>
+
+					</tr>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;尾款:</td>
+						<td style="border: 1px solid #FEDCDC;">
+						&nbsp;&nbsp;<label>${orderPage.ordertower.towerendfee}</label>
+						</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;交单截止时间：</td>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towerendtime}</label>
+
+						</td>
+
+					</tr>
+					<#if (orderPage.ordertower.towerstate==13)>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;延期理由：</td>
+						<td style="border: 1px solid #FEDCDC;" colspan="3">
+							&nbsp;&nbsp;<label>${orderPage.ordertower.towerdelayreason}</label>
+						</td>
+
+					</tr>
+					</#if>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;经纬度：</td>
+						<td style="border: 1px solid #FEDCDC;" colspan="3">
+							&nbsp;&nbsp;经度：<label>${orderPage.ordertower.towerj}</label>
+							&nbsp;&nbsp;纬度：<label>${orderPage.ordertower.towerw}</label>
+						</td>
+
+					</tr>
+					<#if (orderPage.ordertower.towerstate==13)>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;延期理由：</td>
+						<td style="border: 1px solid #FEDCDC;" colspan="3">
+							&nbsp;&nbsp;<textarea  rows="5" cols="50"
+								style="border: 1px solid #FEDCDC; margin-top: 2px">${orderPage.ordertower.towerdelayreason}</textarea>
+						</td>
+					</tr>
+					</#if>
+					<tr>
+						<td style="border: 1px solid #FEDCDC; width: 15%">
+						&nbsp;&nbsp;审核信息：</td>
+						<td style="border: 1px solid #FEDCDC;" colspan="3">
+							&nbsp;&nbsp;<textarea id="shinfo" name="shinfo" rows="5" cols="50"
+								style="border: 1px solid #FEDCDC; margin-top: 2px"></textarea>
+						</td>
+					</tr>
+				</table>
+				<div>&nbsp;</div>
+				<div>
+					<img alt="" src="../assets/images/rizhi.png"> 日志
+				</div>
+
+				<#if (orderPage.shinfos)?size!=0 >
+				<table class="tablelist"
+					style="border: 1px solid #FEDCDC; width: 100%; center; margin-top: 2px">
+					<thead>
+						<tr>
+							<th>操作人</th>
+							<th>操作人电话</th>
+							<th>操作类型</th>
+							<th>当前状态</th>
+							<th>操作时间</th>
+							<th>审核信息</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list orderPage.shinfos as doinfo>
+						<tr>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.ordername}</td>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.orderphone}</td>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.ordertypename}</td>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.orderstatename}</td>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.ordertime}</td>
+							<td style="border: 0px solid #FEDCDC;">${doinfo.ordershinfo}</td>
+						</tr>
+						</#list>
+
+					</tbody>
+
+				</table>
+			</div>
+			</#if>
+
+			<div>
+				<div>&nbsp;&nbsp;</div>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp; 
+				<#if (orderPage.ordertower.towerstate!=0) && (orderPage.ordertower.towerstate!=12)&& (orderPage.ordertower.towerstate!=14)>
+				 <input type="button" value="审核通过"
+					onclick="order_sh(${orderPage.ordertower.id},1)" class="btn">
+				</#if>	
+				
+				
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 <input type="button" value="审核拒绝"
+					onclick="order_sh(${orderPage.ordertower.id},0)" class="btn">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="返回"
+					onclick="javascript:window.location.href='order.html'" class="btn">
+
+			</div>
+		</ul>
+
+
+	</div>
+</form>
+<script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript" src="../assets/js/page/hbtower/order.js"></script>
+</body>
+</html>

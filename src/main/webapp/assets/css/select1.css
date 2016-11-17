@@ -1,0 +1,38 @@
+
+select {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+
+.auto-style15 textarea{
+	width:345px;
+	height:82px;
+	border-top:solid 1px #c3ab7d; 
+	border-left:solid 1px #c3ab7d; 
+	border-right:solid 1px #e7d5ba; 
+	border-bottom:solid 1px #e7d5ba;
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BY59qh2Ow5k3NOe2itLbOHAPpwpCXb31"></script>
+</head>
+<body>
+  <style type="text/css">
+        .auto-style1 {
+            text-align: left;
+        }
+        .auto-style2 {
+            text-align: left;
+            font-size: small;
+      height: 40px;
+        }
+        .auto-style3 {
+            text-align: right;
+            font-size: small;
+           height: 40px;
+               width:160px;
+        }
+        .auto-style7 {
+            text-align: left;
+            font-size: 13px;
+            height: 40px;
+            width: 220px;
+        }
+        .auto-style9 {
+            font-size: 13px;
+          height: 40px;
+            width: 140px;
+            text-align: right;
+        }
+        .auto-style13 {
+            font-size: 13px;
+            height: 40px;
+            width: 90px;
+            text-align: right;
+        }
+        .auto-style15 {
+            text-align: left;
+            font-size: 13px;
+            height: 40px;
+        }
+        .auto-style16 {
+            text-align: right;
+            font-size: 13px;
+            height: 40px;
+            width: 160px;
+        }
+        .auto-style17 {
+            text-align: right;
+            font-size: 13px;
+        }
+        .auto-style18 {
+            text-align: center;
+            font-size: small;
+            height: 40px;
+            width: 160px;
+        }
+        .auto-style19 {
+            text-align: center;
+            font-size: small;
+            height: 40px;
+        }
+        td{
+        border: 1px solid #FEDCDC;
+        }
+    </style>
+    
+    
+    <div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">功能菜单</a></li>
+    <li><a href="#">站址管理</a></li>
+    <li><a href="#">站址详情</a></li>
+          
+    </ul>
+    </div>
+    
+    <div class="formbody">
+    
+    <div class="formtitle"><span>站址基本信息</span></div>
+    
+    <ul class="forminfo">
+    
+        <table align="center" cellpadding="0" cellspacing="0" class="filetable" style="border:1px;border-color:#FEDCDC;">
+            <tr>
+                <td class="auto-style13">站址名称：</td>
+                <td class="auto-style1">
+                    <label >${tower.towername}</label>
+                    <asp:Label ID="tname" runat="server" Text=""></asp:Label>
+                </td>
+                <td class="auto-style17">运营商需求：</td>
+                <td class="auto-style1">
+                 <label >${tower.towername}</label>
+                  
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style13">地区：</td>
+                <td class="auto-style7">
+                  <label > ${tower.cityname}-${tower.areaname}</label>
+                     
+                </td>
+                <td class="auto-style17">自定义编号：</td>
+                <td class="auto-style1">
+                  <label> ${tower.toweridefined}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style13">详细地址：</td>
+                <td class="auto-style7">
+                 <label>${tower.toweraddress}</label>
+                </td>
+                <td class="auto-style17">系统编号：</td>
+                <td class="auto-style1">
+                     <label>${tower.towerid}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style13">站址等级：</td>
+                <td class="auto-style7">
+                       <label>${tower.towerlevelname}</label>
+                </td>
+                <td class="auto-style17">站型：</td>
+                <td class="auto-style15">
+                    <label>${tower.towertypename}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style13">谈址费（元）：</td>
+                <td class="auto-style7">
+                   <label>${tower.towerfee}</label>
+                </td>
+                <td class="auto-style17">租用面积（m²）：</td>
+                <td class="auto-style15">
+                   <label>${tower.towerlarge}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style13">站址状态：</td>
+                <td class="auto-style7">
+                    <label>${tower.towerstatename}</label>
+                </td>
+                <td class="auto-style17">区域经理联系方式：</td>
+                <td class="auto-style15">
+                     <label>${tower.towermanager}</label>
+                </td>
+            </tr>
+            <tr>
+              <td class="auto-style17">添加日期：</td>
+                <td class="auto-style15" >
+                   <label>${tower.toweradddate}</label>
+                </td>
+                <td class="auto-style13">经纬度：</td>
+                <td class="auto-style7">
+                    <label>${tower.towerj}-${tower.towerw}</label>
+                </td>
+                
+               
+            </tr>
+              <#if (tower.towervisible==1)>
+             <tr>
+                <td class="auto-style16">上架日期：</td>
+                <td class="auto-style15" colspan="3">
+                   <label>${tower.towervisibletime}</label>
+                </td>
+            </tr>
+            </#if>
+            
+            <tr>
+                <td class="auto-style16">站址描述：</td>
+                <td class="auto-style15" colspan="3">
+                   <label>${tower.towerinfo}</label>
+                </td>
+            </tr>
+            
+             <tr>
+               
+            </tr>
+          
+            <tr>
+                <td class="auto-style16">生成地图：</td>
+                <td class="auto-style15" colspan="3">
+                <div id="allmap"  style="width: 400px;height: 200px"></div>
+            </tr>
+            <tr>
+                <td class="auto-style16"  style="border: 0px"></td>
+                <td class="auto-style15"  style="border: 0px">
+            </tr>
+            <tr>
+                <td class="auto-style3" style="border: 0px">&nbsp;</td>
+               
+                <td class="auto-style18"  style="border: 0px">
+                <input type="hidden" id="selecttoweids" value="${tower.id}">
+                <#if (tower.towervisible==0)>
+                <input type="button" class="btn" onclick="tower_visible(1)" value="上架此站点">
+                </#if>
+                <#if (tower.towervisible==1 && tower.towerstate==0)>
+                <input type="button" class="btn" onclick="tower_visible(0)" value="下架此站点">
+                </#if>
+                </td>
+                 <td class="auto-style19"  style="border: 0px">
+                <input type="button" class="btn" onclick="javascript:history.go(-1)" value="返回">
+                </td>
+                <td class="auto-style2"  style="border: 0px">
+                </td>
+            </tr>
+            </table>
+    
+    </ul>
+    
+    
+    
+    </div>
+    
+    <div class="tip" id="tip_1">
+			<div class="tiptop">
+				<span>提示信息</span><a></a>
+			</div>
+
+			<div class="tipinfo">
+				<span><img src="../assets/images/ticon.png" /></span>
+				<div class="tipright">
+					<p id="top_info">确认要下架站址吗 ？</p>
+					<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+				</div>
+			</div>
+
+			<div class="tipbtn">
+				<input name="" type="button" class="sure" onclick="tower_del()" value="确定" />&nbsp; <input
+					name="" type="button" class="cancel" value="取消" />
+			</div>
+
+	</div>
+	<div class="tip" id="tip_2">
+			<div class="tiptop">
+				<span>提示信息</span><a></a>
+			</div>
+
+			<div class="tipinfo">
+				<span><img src="../assets/images/ticon.png" /></span>
+				<div class="tipright">
+					<p id="top_info">确认要上架站址吗 ？</p>
+					<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+				</div>
+			</div>
+
+			<div class="tipbtn">
+				<input name="" type="button" class="sure" onclick="tower_del()" value="确定" />&nbsp; <input
+					name="" type="button" class="cancel" value="取消" />
+			</div>
+
+	</div>
+    	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+		<script type="text/javascript" src="../assets/js/page/hbtower/tower.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+	// 百度地图API功能
+	
+	var map = new BMap.Map("allmap");
+	
+	var point = new BMap.Point(${tower.towerj}, ${tower.towerw});
+	map.centerAndZoom(point, 15);
+	setTimeout(function(){
+		   map.enableDragging();   //两秒后开启拖拽
+		   //map.enableInertialDragging();   //两秒后开启惯性拖拽
+		}, 2000);
+	map.enableScrollWheelZoom(true);
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);               // 将标注添加到地图中
+	marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+});
+</script>
+
+</body>
+</html>

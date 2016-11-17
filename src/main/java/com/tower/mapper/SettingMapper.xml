@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.SettingMapper">
+
+	<update id="updateTowerGs">
+		update tower_setting
+		set content= CONVERT(varchar,
+		GETDATE(), 120 ) 
+		where name='gsstarttime'
+		;
+	</update>
+	
+	<select id="getSetting" parameterType="String" resultType="com.tower.common.bean.Setting">
+	  select 
+	  t.id as id,
+	  t.name as name,
+	  t.content as content
+	  from tower_setting t
+	  where t.name=#{name}
+	  ;
+	</select>
+	
+	<select id="getOutPhones" resultType="com.tower.common.bean.OutDatePhone">
+	  select *
+	  from Tower_outdate_phone
+	  where 1=1
+	  and send_state=0
+	</select>
+	
+	<update id="updateOutSend" parameterType="map">
+	  update Tower_outdate_phone
+	  set  send_state=1,
+	  sendtime=GETDATE()
+	  where id in (
+	  <foreach collection="phones" item="phone" separator=",">
+	   #{phone.id}
+	  </foreach>
+	  )
+	</update>
+
+</mapper>

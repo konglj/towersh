@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.OrderMapper">
+	<!-- 获取用户信息 -->
+	<select id="getOrders" parameterType="com.tower.common.bean.OrderPage"
+		resultType="com.tower.common.bean.Order">
+
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY toweraddtime desc)
+		as rank from(
+		select
+		o.id as id,
+		u.User_name as username,
+		u.User_tele as
+		usertele,
+		u.User_win_type as userwintype,
+		a.area_name as
+		towerareaname,
+		c.City_name as towercityname,
+		t.Tower_name as towername,
+		o.Tower_state as towerstate,
+		o.Tower_fee as
+		towerfee,
+		o.Tower_fact_fee as towerfactfee,
+		CONVERT(varchar,
+		o.Tower_add_time, 120 ) as toweraddtime,
+		s.statename as towerstatename,
+		o.Tower_pj_progress as towerpjprogress,
+		t.ID as towerid,
+		t.Tower_id as  towerno,
+	    t.Tower_idefined as toweridefined,
+		u.Wx_id as userwxid,
+		uc.City_name as usercityname
+		from tower_order_detail o
+		left join
+		tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join tower_tower_info t
+		on t.ID=o.Tower_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join
+		tower_city c on
+		c.City_id=a.City_id
+		left join tower_area ua on
+		ua.ID=u.User_area
+		left
+		join tower_city uc on uc.City_id=ua.City_id
+		left join tower_order_state
+		s on s.state=o.Tower_state
+		where
+		1=1
+		and t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towerno!=null and parameter.towerno!='' ">
+			and t.Tower_id like '%${parameter.towerno}%'
+		</if>
+		
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate>-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and uc.ID=#{parameter.usercity}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+		<if test="parameter.adminorderstates!=null">
+			and o.Tower_state in(
+			<foreach collection="parameter.adminorderstates" item="state"
+				separator=",">
+				#{state}
+			</foreach>
+			)
+		</if>
+		<if test="isShPage!=null and isShPage==1">
+			and o.Tower_state=8
+		</if>
+
+		)w1)as tmp where tmp.rank between
+		#{pageno}*#{pageSize}-(#{pageSize}-1) and #{pageno}*#{pageSize}
+
+	</select>
+	<select id="getOrdersCount" parameterType="com.tower.common.bean.OrderPage"
+		resultType="int">
+
+		select
+		count(1)
+		from tower_order_detail o
+		left join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join tower_city c on
+		c.City_id=a.City_id
+		left join tower_area ua on ua.ID=u.User_area
+		left
+		join tower_city uc on uc.City_id=ua.City_id
+		left join tower_order_state
+		s on s.state=o.Tower_state
+		where 1=1
+		and
+		t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towerno!=null and parameter.towerno!='' ">
+			and t.Tower_id like '%${parameter.towerno}%'
+		</if>
+		
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate>-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and uc.ID=#{parameter.usercity}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+		<if test="parameter.adminorderstates!=null">
+			and o.Tower_state in(
+			<foreach collection="parameter.adminorderstates" item="state"
+				separator=",">
+				#{state}
+			</foreach>
+			)
+		</if>
+		<if test="isShPage!=null and isShPage==1">
+			and o.Tower_state=8
+		</if>
+
+	</select>
+
+
+	<select id="getIndexPageOrdersCount" parameterType="com.tower.common.bean.OrderPage"
+		resultType="int">
+
+		select
+		count(1)
+		from tower_order_detail o
+		left join tower_tower_info t on
+		t.ID=o.Tower_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join
+		tower_city c on c.City_id=a.City_id
+		where 1=1
+		and
+		t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		and o.Tower_state in (
+		<foreach collection="selectstates" item="state" separator=",">
+			#{state}
+		</foreach>
+		)
+	</select>
+
+
+
+	<select id="getOrderTower" parameterType="int"
+		resultType="com.tower.common.bean.OrderTower">
+		select
+		o.ID as id,
+		o.Order_id as orderid,
+		o.Tower_wx_id as
+		towerwxid,
+		o.Tower_first_fee as towerfirstfee,
+		o.Tower_end_fee as
+		towerendfee,
+		o.Tower_id as towerid,
+		o.Tower_fee as towerfee,
+		o.Tower_ht_id as towerhtid,
+		o.Tower_delay_reason as towerdelayreason,
+		s.statename as towerstatename,
+		o.Tower_state as towerstate,
+		CONVERT(varchar,
+		o.Tower_add_time , 120 ) as toweraddtime,
+		CONVERT(varchar,
+		o.Tower_end_date , 120 ) as towerendtime,
+		CONVERT(varchar,
+		o.Tower_abandon_time , 120 ) as towerabandontime,
+		t.Tower_name
+		towername,
+		c.City_name as
+		towercityname,
+		c.ID as towercityid,
+		a.area_name as towerareaname,
+		t.Tower_level as towerlevelid,
+		case t.Tower_level
+		when 1 then '一级站址'
+		when 2 then
+		'二级站址'
+		when 3 then
+		'三级站址'
+		when 4 then '四级站址'
+		end as towerlevel,
+		t.Tower_j
+		as towerj,
+		t.Tower_w as towerw,
+		t.Tower_info as towerinfo,
+		t.Tower_manager as
+		towermanager,
+		t.Tower_manager_name as
+		towermanagername,
+		p.Tower_type_name as towertypename,
+		t.Tower_rent_fee
+		as towerrentfee,
+		(isnull(o.Tower_target_gps,'')+'
+		'+o.Tower_target_address) as towertargetaddress,
+		case
+		o.Tower_power_type
+		when 1 then '直供电'
+		when 2 then '转供电'
+		end as
+		towerpowertypename,
+		o.Tower_power_price as towerpowerprice,
+		o.Tower_power_t as towerpowert,
+		o.Tower_fact_fee as towerfactfee,
+		o.Tower_three_ht as towerthreeht,
+		o.Tower_fact_rent_fee as
+		towerfactrentfee,
+		o.Tower_ht_imag as
+		towerhtimag,
+		o.Tower_file as
+		towerfile,
+		o.Tower_fact_address as towerfactaddress,
+		o.Tower_yz_name as
+		toweryzname,
+		o.Tower_yz_phone as toweryzphone,
+		o.Tower_pj_progress as
+		towerpjprogress,
+		o.Tower_yq_count as toweryqcount,
+		e.admincontent as
+		adminpjcontent,
+		e.usercontent as userpjcontent,
+		e.usertowercontent as
+		userpjtower,
+		r.Con_reject_count as conrejectcount,
+		o.Tower_project_no as
+		towerprojectno,
+		o.Tower_project_name as towerprojectname,
+		o.Tower_fact_gps as towerfactgps
+		from
+		tower_order_detail o
+		left join
+		tower_tower_info t on
+		t.ID=o.Tower_id
+		left
+		join tower_area a on
+		a.ID=t.Tower_area
+		left join
+		tower_city c on
+		c.City_id=a.City_id
+		left join
+		tower_tower_type p on p.ID=t.Tower_type
+		left join tower_order_state s on s.state=o.Tower_state
+		left join
+		tower_order_evaluate e on e.orderid=o.ID
+		left join data_report_tower r
+		on r.Tower_id=t.ID
+		where 1=1
+		and
+		o.id=#{id}
+
+
+
+	</select>
+	<select id="getOrderUser" parameterType="String"
+		resultType="com.tower.common.bean.OrderUser">
+		select
+		u.User_name as username,
+		u.User_tele as usertele,
+		a.area_name as userareaname,
+		c.City_name as usercityname,
+		(case
+		u.user_level
+		when 4 then '四级用户'
+		when 3 then '三级用户'
+		when 2 then '二级用户'
+		when 1 then '一级用户'
+		end ) as userlevel,
+		u.User_company as usercompany,
+		b.businessname as userbusiness,
+		oi.Order_count as
+		ordercount,
+		oi.Succ_count as succcount,
+		oi.Ing_count as
+		ingcount,
+		oi.Fail_count as
+		failcount,
+		oi.Cancel_count as cancelcount
+
+		from
+		tower_user_info u
+		left join
+		tower_area a on a.ID=u.User_area
+		left
+		join
+		tower_city c on
+		c.City_id=a.City_id
+		left join tower_user_order_info
+		oi
+		on
+		oi.Wx_id=u.Wx_id
+		left join tower_user_business b on
+		b.businessid=u.User_business
+		where u.Wx_id=#{wxid}
+		;
+
+
+	</select>
+
+	<update id="updateOrderState" parameterType="map">
+		update tower_order_detail
+		set
+		<if
+			test="towerstate!=null and (towerstate==3 or towerstate==6 or towerstate==11 or towerstate==18 or towerstate==23) ">
+			Tower_abandon_time=GETDATE(),
+			Tower_apply_time=NULL,
+		</if>
+		<if test="towerstate!=null and towerstate==5 ">
+			Tower_ht_id=#{htid},
+			Tower_ht_imag=#{image},
+			Tower_first_fee=#{firstfee},
+			Tower_end_fee=#{endfee},
+		</if>
+		<if test="towerstate!=null and towerstate==8 ">
+			Tower_file=#{image},
+			Tower_project_no=#{towerprojectno},
+			Tower_project_name=#{towerprojectname},
+		</if>
+		<if test="towerstate!=null and towerstate==9 ">
+			Tower_complete_time=GETDATE(),
+		</if>
+		<if test="towerstate!=null and towerstate==12 ">
+			Tower_end_date=DATEADD(SECOND,DATEDIFF(SECOND,Tower_apply_time,GETDATE())+#{yqcount}*60*60,Tower_end_date),
+			Tower_apply_time=NULL,
+		</if>
+		<if test="towerstate!=null and (towerstate==14 or towerstate==19) ">
+			Tower_end_date=DATEADD(SECOND,DATEDIFF(SECOND,Tower_apply_time,GETDATE()),Tower_end_date),
+			Tower_apply_time=NULL,
+		</if>
+		
+
+
+		Tower_state=#{towerstate}
+		where ID=#{orderid}
+		;
+	</update>
+
+	<update id="updateTowerState" parameterType="map">
+		update
+		tower_tower_info
+		set Tower_state=#{towerstate}
+		where ID=#{towerid}
+		;
+	</update>
+
+	<update id="updateTowerUserOrderInfo" parameterType="map">
+		update tower_user_order_info
+		set
+		<if test="failcount!=null and failcount!=0">
+			Fail_count=Fail_count+#{failcount},
+		</if>
+		<if test="succcount!=null and succcount!=0">
+			Succ_count=Succ_count+#{succcount},
+		</if>
+		<if test="ingcount!=null and ingcount!=0">
+			Ing_count=Ing_count+#{ingcount},
+		</if>
+		<if test="rejectcount!=null and rejectcount!=0">
+			Reject_count=Reject_count+#{rejectcount},
+		</if>
+		Order_count=Order_count+0
+		where Wx_id=#{wxid}
+		;
+	</update>
+
+
+
+
+	<insert id="insertUserOrder" parameterType="com.tower.common.bean.UserOrderInfo">
+		insert into
+		tower_user_order_info
+		(Wx_id,Order_count,Succ_count,Ing_count,Fail_count,Cancel_count)
+		values
+		(#{wxid},#{ordercount},#{succcount},#{ingcount},#{failcount},#{cancelcount})
+		;
+	</insert>
+	<select id="checkUserOrder" parameterType="String" resultType="int">
+		select count(1)
+		from tower_user_order_info
+		where Wx_id=#{wxid}
+		;
+	</select>
+
+	<update id="updateUserCharge" parameterType="com.tower.common.bean.UserChargeInfo">
+		update tower_user_charge
+		set
+		<if test="charge!=0">
+			Charge=Charge+#{charge},
+		</if>
+		<if test="getnow!=0">
+			Get_now=Get_now+#{getnow},
+		</if>
+		<if test="gettingnow!=0">
+			Getting_now=Getting_now+#{gettingnow},
+		</if>
+		<if test="allgetting!=0">
+			All_geting=All_geting+#{allgetting},
+		</if>
+		<if test="experience!=0">
+			Experience=Experience+#{experience},
+		</if>
+		<if test="score!=0">
+			Score=Score+#{score},
+		</if>
+		Wx_id=#{wxid}
+		where Wx_id=#{wxid};
+	</update>
+
+
+	<select id="getUserCharge" parameterType="String"
+		resultType="com.tower.common.bean.UserChargeInfo">
+
+		select
+		c.ID as id,
+		c.Wx_id as wxid,
+		c.Charge as charge,
+		c.Get_now as getnow,
+		c.Getting_now as gettingnow,
+		c.All_geting as
+		allgeting,
+		c.Experience as experience,
+		c.Score as score,
+		u.User_level as
+		userlevel
+		from tower_user_charge c
+		left join tower_user_info u on
+		u.Wx_id=c.Wx_id
+		where 1=1
+		and c.Wx_id=#{wxid}
+		;
+
+	</select>
+
+	<insert id="insertTxSource" parameterType="com.tower.common.bean.TxSource">
+		insert into
+		tower_user_tx_source
+		(Order_id,WX_ID,Fee,Fee_type,Pay_time)
+		values
+		(#{orderid},#{wxid},#{fee},#{feetype},GETDATE())
+		;
+	</insert>
+
+
+	<select id="getDcOrders" parameterType="com.tower.common.bean.OrderPage"
+		resultType="map">
+		select
+		o.Order_id as orderid,
+		u.User_name as username,
+		u.User_tele as
+		usertele,
+		case
+		u.User_level
+		when 1 then '一级用户'
+		when 2 then '二级用户'
+		when 3
+		then '三级用户'
+		when 4 then '四级用户'
+		end as userlevelname,
+		uc.City_name as
+		usercityname,
+		u.User_win_type as userwintype,
+		u.User_win_time as userwintime,
+		u.User_company as usercompany,
+		v.Type_name as usertype,
+		m.businessname as userbusiness,
+		t.Tower_name as towername,
+		a.area_name
+		as towerareaname,
+		c.City_name as towercityname,
+		t.Tower_idefined as
+		toweridefined,
+		t.Tower_who_yd as towerwhoyd,
+		t.Tower_who_dx as towerwhodx,
+		t.Tower_who_lt as towerwholt,
+		t.Tower_address as toweraddress,
+		case
+		t.Tower_level
+		when 1
+		then '一级站址'
+		when 2 then '二级站址'
+		when 3 then '三级站址'
+		when 4 then '四级站址'
+		end
+		as towerlevelname,
+		p.Tower_type_name as towertypename,
+		t.Tower_large as
+		towerlarge,
+		t.Tower_j as towerj,
+		t.Tower_w as towerw,
+		t.Tower_manager as
+		towermanager,
+		t.Tower_manager_name as towermanagername,
+		t.Tower_info as
+		towerinfo,
+		o.Tower_project_no as towerprojectno,
+		o.Tower_project_name as towerprojectname,
+		s.statename as towerstatename,
+		o.Tower_fee as towerfee,
+		t.Tower_rent_fee as towerrentfee,
+		o.Tower_fact_fee as towerfactfee,
+		o.Tower_fact_rent_fee as towerfactrentfee,
+		o.Tower_target_address as
+		towertargetaddress,
+		o.Tower_fact_address as towerfactaddress,
+		case
+		o.Tower_power_type
+		when 1 then '直供电'
+		when 2 then '转供电'
+		end as
+		towerpowertype,
+		o.Tower_power_price as towerpowerprice,
+		o.Tower_power_t
+		as towerpowert,
+		o.Tower_yz_name as toweryzname,
+		o.Tower_yz_phone as
+		toweryzphone,
+		CONVERT(varchar,
+		o.Tower_add_time, 120 ) as toweraddtime,
+		ss.storename as towerstorename,
+		ct.name as towercreatetypename
+
+		from tower_order_detail o
+		left
+		join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join tower_city c on
+		c.City_id=a.City_id
+		left join tower_city uc on uc.ID=u.User_area
+		left
+		join tower_tower_type p on p.ID=t.Tower_type
+		left join
+		tower_order_state s on s.state=o.Tower_state
+		left join tower_user_type
+		v on v.ID=u.User_type
+		left join tower_user_business m on m.businessid=u.User_business
+		left join tower_tower_store ss on ss.storeid=t.Tower_store
+		left join tower_create_type ct on ct.id=t.Tower_create_type
+
+		where
+		1=1
+		and t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate>-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and uc.ID=#{parameter.usercity}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+		<if test="parameter.adminorderstates!=null">
+			and o.Tower_state in(
+			<foreach collection="parameter.adminorderstates" item="state"
+				separator=",">
+				#{state}
+			</foreach>
+			)
+		</if>
+		<if test="isShPage!=null and isShPage==1">
+			and o.Tower_state=8
+		</if>
+		order by o.Tower_add_time desc
+
+	</select>
+
+
+
+	<insert id="insertScore" parameterType="com.tower.common.bean.Score">
+		insert into
+		Tower_user_score
+		(Wx_id,Score_count,Score_reason,Score_time)
+		values
+		(#{wxid},#{scorecount},#{scorereason},GETDATE())
+		;
+	</insert>
+
+	<select id="getCheckCancelOrder" resultType="map">
+		select
+		o.ID as orderid,
+		o.Tower_wx_id as towerwxid,
+		o.Tower_id as towerid,
+		DATEDIFF(hour,GETDATE(),o.Tower_end_date) as towerhour,
+		a.ID as towerarea,
+		c.ID as towercity
+		from
+		tower_order_detail o
+		left join tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join tower_city c on c.City_id=a.City_id
+		
+		where 1=1
+		and (o.Tower_end_date<![CDATA[ <= ]]>GETDATE() 
+		      or ( DATEDIFF(hour,GETDATE(),o.Tower_end_date)<![CDATA[ <= ]]>24 and ( o.Tower_send_msg_qy=0 or o.Tower_send_msg_qy is null) )
+		     ) 
+		and (o.Tower_state=0 or o.Tower_state=12 or o.Tower_state=14 or o.Tower_state=19
+		)
+		;
+	</select>
+	
+	<update id="updateOrderCancel24" parameterType="map" >
+		update tower_order_detail
+		set Tower_send_msg_qy=#{towersendmsg}
+		where ID=#{orderid}
+		
+		;
+	</update>
+
+	<select id="getCheckPostUnDo" parameterType="int" resultType="map">
+		select
+		o.ID as orderid,
+		o.Tower_wx_id as towerwxid,
+		t.Tower_name as
+		towername
+		from
+		tower_order_detail o
+		left join tower_tower_info t on
+		t.id=o.Tower_id
+		where 1=1
+		and o.Tower_state=2
+		and (o.Tower_send_message=0
+		or o.Tower_send_message is null)
+		and DATEDIFF (day, (select top(1)
+		i.Order_time from tower_sh_doinfo i where i.Order_id=o.ID and
+		i.Order_state=2 order by i.Order_time desc),GETDATE())>=#{day}
+		;
+	</select>
+	<update id="updateSendMessage" parameterType="map">
+		update tower_order_detail 
+		set Tower_send_message=1
+		where id=#{orderid}
+		;
+	</update>
+
+
+
+
+	<select id="getUserOrderInfo" parameterType="String"
+		resultType="com.tower.common.bean.UserOrderInfo">
+		select
+
+		o.Wx_id as wxid,
+		o.Order_count as ordercount,
+		o.Succ_count as succcount,
+		o.Ing_count as ingcount,
+		o.Fail_count as
+		failcount,
+		o.Cancel_count as
+		cancelcount,
+		o.Concancel_count as
+		concancelcount,
+		o.Time_count as
+		timecount
+		from tower_user_order_info o
+		where o.Wx_id=#{wxid}
+		;
+
+	</select>
+	<update id="updateUserCancelOrderCount" parameterType="map">
+		update
+		tower_user_order_info
+		set
+		Fail_count=Fail_count+1,
+		Ing_count=Ing_count-1,
+		<!-- Concancel_count=Concancel_count+1, -->
+		Time_count=Time_count+1
+		where Wx_id=#{towerwxid};
+	</update>
+
+	<select id="getOrderHistorys" parameterType="int"
+		resultType="com.tower.common.bean.Order">
+		select
+		o.Order_id as orderid,
+		CONVERT(varchar,
+		o.Tower_add_time, 120 ) as toweraddtime,
+		u.User_name as username,
+		u.User_tele as usertele,
+		s.statename as
+		towerstatename,
+		ua.area_name as
+		userareaname,
+		uc.City_name as
+		usercityname
+		from tower_order_detail o
+		left
+		join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join tower_area ua
+		on ua.ID=u.User_area
+		left
+		join tower_city uc on uc.City_id=ua.City_id
+		left join tower_order_state s on s.state=o.Tower_state
+		where 1=1
+		and
+		o.Tower_id=#{towerid}
+		order by o.Tower_add_time desc
+		;
+	</select>
+
+	<select id="getDcTowerOrderHistorys" parameterType="int"
+		resultType="map">
+		select
+		o.Order_id as orderid,
+		CONVERT(varchar,
+		o.Tower_add_time, 120 ) as toweraddtime,
+		u.User_name as username,
+		u.User_tele as usertele,
+		s.statename as
+		towerstatename,
+		ua.area_name as
+		userareaname,
+		uc.City_name as
+		usercityname,
+		t.Tower_name as towername
+		from tower_order_detail o
+		left
+		join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join tower_area ua
+		on ua.ID=u.User_area
+		left
+		join tower_city uc on uc.City_id=ua.City_id
+		left join tower_tower_info
+		t on t.ID=o.Tower_id
+		left join tower_order_state s on
+		s.state=o.Tower_state
+		where 1=1
+		and
+		o.Tower_id=#{towerid}
+		order by
+		o.Tower_add_time desc
+		;
+	</select>
+
+
+	<update id="updateOrderByRentHt" parameterType="com.tower.common.bean.OrderInfo">
+		update
+		tower_order_detail
+		set
+		Tower_ht_id=#{towerhtid},
+		Tower_ht_imag=#{towerhtimag},
+		Tower_fact_rent_fee=#{towerfactrentfee},
+		Tower_power_type=#{towerpowertype},
+		Tower_power_price=#{towerpowerprice},
+		Tower_power_t=#{towerpowert},
+		Tower_state=#{towerstate},
+		Tower_fact_address=#{towerfactaddress},
+		Tower_yz_name =#{toweryzname},
+		Tower_yz_phone=#{toweryzphone},
+		Tower_fact_gps=#{towerfactgps}
+		where
+		ID=#{id}
+		;
+	</update>
+
+	<update id="updateOrderByThreeHt" parameterType="com.tower.common.bean.OrderInfo">
+		update
+		tower_order_detail
+		set
+		Tower_fact_fee=#{towerfactfee},
+		Tower_three_ht=#{towerthreeht},
+		Tower_state=#{towerstate}
+		where ID=#{id}
+		;
+	</update>
+
+	<select id="getOrderStates" resultType="com.tower.common.bean.OrderState">
+		select id as id,
+		state as
+		state,
+		imgsrc as imgsrc,
+		statename as statename
+		from tower_order_state
+		where state!=24
+		order by id asc
+		;
+	</select>
+
+
+	<update id="updateOrderPjProgress" parameterType="map">
+		update tower_order_detail
+		set tower_pj_progress=tower_pj_progress+#{progress}
+		where ID=#{orderid}
+		;
+	</update>
+
+
+
+
+</mapper>

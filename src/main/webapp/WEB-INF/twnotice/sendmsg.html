@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- Vendor CSS-->
+<!-- Vendor CSS-->
+<link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet" />
+<link href="../assets/vendor/skycons/css/skycons.css" rel="stylesheet" />
+<link href="../assets/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" />
+<link href="../assets/vendor/css/pace.preloader.css" rel="stylesheet" />
+<link href="../assets/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" />
+<!-- Plugins CSS-->
+<link href="../assets/plugins/bootkit/css/bootkit.css" rel="stylesheet" />
+<link href="../assets/plugins/bootstrap-datepicker/css/datepicker3.css"
+	rel="stylesheet" />
+<link
+	href="../assets/plugins/bootstrap-datepicker/css/datepicker-theme.css"
+	rel="stylesheet" />
+<link
+	href="../assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css"
+	rel="stylesheet" />
+<link
+	href="../assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css"
+	rel="stylesheet" />
+<link
+	href="../assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css"
+	rel="stylesheet" />
+<!-- Page CSS -->
+<link href="../assets/boot/style.css" rel="stylesheet" />
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+select {
+	width: 240px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+
+a,a:focus {
+	text-decoration: none;
+	color: #000;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #EB5409
+}
+</style>
+</head>
+<body>
+
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="#">公告管理</a></li>
+			<li><a href="#">发送公告</a></li>
+		</ul>
+	</div>
+
+<form id="send_notice_form" >
+<input type="hidden" name="noticeid" value="${(twNoticePage.twNotice.id)!!}">
+<input type="hidden" name="noticetitle" value="${(twNoticePage.twNotice.title)!!}">
+<input type="hidden" name="admintype" value="${(twNoticePage.admintype)!!}">
+	<div class="row"
+		style="margin-left: 10%; margin-top: 30px; background-color: #FFF">
+		<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+			<div class="panel panel-default bk-bg-white"
+				style="margin-left: 10px">
+				标题： <label style="margin: 10px">${(twNoticePage.twNotice.title)!!}</label>
+				<br /> 用户级别：<select style="margin: 10px" id="userlevel" name="userlevel" >
+					<optgroup label="选择用户级别">
+						<option value="0">全部</option>
+						<option value="1">一级用户</option>
+						<option value="2">二级用户</option>
+						<option value="3">三级用户</option>
+						<option value="4">四级用户</option>
+					</optgroup>
+
+				</select> <br /> 用户类型：<select style="margin: 10px" id="usertype" name="usertype">
+					<optgroup label="选择用户级别">
+						<option value="0">全部</option>
+						<#list twNoticePage.userTypes as type>
+						<option value="${type.id}">${type.typename}</option>
+						</#list>
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+					<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"
+						style="margin-top: 20px">
+						<div class="panel panel-default " style="background-color: #000">
+							<div class="panel-heading ">
+								<h6>
+								 <div class="checkbox-custom   ">
+										<input type="checkbox" id="province" name="province" onclick="check_all(this,'citys');"
+										 checked="checked"	value="province"> <label for="checkbox1">${twNoticePage.province}</label>
+									</div>
+								</h6>
+								<div class="panel-actions">
+									<a href="#" class="btn-minimize"><i class="fa fa-caret-up"></i></a>
+									<a href="#" class="btn-close"><i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="panel-body">
+							<#list twNoticePage.admincitys as city>
+							    <#if city.rownumber==1>
+							      <div class="row" style="margin-left: 10px">
+							    </#if>
+							    <div class="checkbox-custom  col-md-3 ">
+										<input type="checkbox" id="${city.id}" name="citys" checked="checked"  onclick="set_check_all(this,'province')"
+											value="${city.id}"> <label for="checkbox1">${city.cityname}</label>
+									</div>
+								<#if city.rownumber%4==0 >
+								   </div>
+								    <div class="row" style="margin-left:10px">
+								</#if>
+									
+						     </#list>		
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+              
+              
+
+				</div>
+		
+				<div style="margin-top: 20px">
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;                    
+                 <input type="button" onclick="send()" class="btn" value="发送">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <input type="button" value="返回" onclick="javascript:history.go(-1)" class="btn">
+              </div>
+              </form>
+				<script type="text/javascript" src="../assets/js/jquery.js"></script>
+				<script type="text/javascript"
+					src="../assets/js/jquery.idTabs.min.js"></script>
+				<script type="text/javascript" src="../assets/js/select-ui.min.js"></script>
+				<script type="text/javascript" src="../assets/editor/kindeditor.js"></script>
+				<script type="text/javascript"
+					src="../assets/js/page/notice/twnotice.js"></script>
+
+				<!-- Vendor JS-->
+				<script src="../assets/vendor/js/jquery.min.js"></script>
+				<script src="../assets/vendor/js/jquery-2.1.1.min.js"></script>
+				<script src="../assets/vendor/js/jquery-migrate-1.2.1.min.js"></script>
+				<script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+				<script src="../assets/vendor/skycons/js/skycons.js"></script>
+				<script src="../assets/vendor/js/pace.min.js"></script>
+
+				<!-- Plugins JS-->
+				<script src="../assets/plugins/moment/js/moment.min.js"></script>
+				<script src="../assets/plugins/select2/select2.js"></script>
+				<script
+					src="../assets/plugins/jquery-datatables/media/js/jquery.dataTables.js"></script>
+				<script
+					src="../assets/plugins/jquery-datatables/extras/TableTools/js/dataTables.tableTools.min.js"></script>
+				<script
+					src="../assets/plugins/jquery-datatables-bs3/js/datatables.js"></script>
+				<script src="../assets/plugins/sparkline/js/jquery.sparkline.min.js"></script>
+
+				<!-- Theme JS -->
+				<script src="../assets/js/jquery.mmenu.min.js"></script>
+				<script src="../assets/js/core.min.js"></script>
+
+
+				<script type="text/javascript">
+       KE.show({
+           id: 'content7',
+           cssPath: './index.css'
+       });
+  </script>
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $(".select1").uedSelect({
+            width: 167 
+             
+        });
+        $(".select2").uedSelect({
+            width: 100 
+        });
+        $(".select3").uedSelect({
+            width: 200,height:25
+        });
+    });
+</script>
+				<style type="text/css">
+.auto-style4 {
+	text-align: right;
+	height: 40px;
+	width: 147px;
+}
+
+.SELECT {
+	border: 1px solid #629ACD;
+	FONT-SIZE: 9pt;
+	FONT-FAMILY: "Arial", "Helvetica", "sans-serif";
+	background-color: #EBF5FD;
+	vertical-align: text-button;
+}
+
+.auto-style8 {
+	text-align: left;
+}
+</style>
+</body>
+</html>

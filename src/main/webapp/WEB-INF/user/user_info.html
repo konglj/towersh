@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户基本信息</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<!-- Plugins CSS-->
+		<link href="../assets/plugins/bootkit/css/bootkit.css" rel="stylesheet" />	
+		<link href="../assets/plugins/magnific-popup/css/magnific-popup.css" rel="stylesheet" />
+<style type="text/css">
+ lable{
+   width: 205px;
+ }
+</style>
+</head>
+<body>
+  <div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">用户管理</a></li>
+    <li><a href="#">用户基本信息</a></li>
+          
+    </ul>
+    </div>
+    
+    <div class="formbody">
+    
+    <div class="formtitle"><span>用户基本信息</span></div>
+    
+    <ul class="forminfo">
+    <div>
+     <img alt="" src="../assets/images/qiangdanrenxinxi.png">用户基本信息
+        <!-- <div>微信ID: <label >${usermanagePage.userinfo.wxid}</label></div> -->
+        <table align="center" cellpadding="0" cellspacing="0" style="border:1px   solid #FEDCDC; width:100%; height: 280px;"  >
+            <tr>
+                <td style="border:1px   solid #FEDCDC; width:15%" >&nbsp;&nbsp; 微信昵称：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.wxname}</label>
+                    <asp:Label ID="qname" runat="server" Width="205px"></asp:Label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 性别：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.sexname}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC; width:15%" >&nbsp;&nbsp; 关注时间：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.addtime}</label>
+                    <asp:Label ID="qname" runat="server" Width="205px"></asp:Label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 姓名：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.username}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 地区：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%" >
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.cityname}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 电话：</td>
+                <td  style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.usertele}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 所在单位：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.usercompany}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 行业</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.userbusinessname}</label>
+                </td>
+              </tr>
+            <tr>   
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 级别：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.levelname}</label>
+                </td>
+           
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 类型：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.typename}</label>
+                </td>
+               </tr>
+            <tr>  
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 状态：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.statename}</label>
+                </td>
+          
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 积分：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.score}</label>
+                </td>
+                  </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 经验：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.exp}</label>
+                </td>
+            
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 注册时间：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.addtime}</label>
+                </td>
+                  </tr>
+            <tr>
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 组织类型：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.teamtypename}</label>
+                </td>
+           
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 验证状态</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.verifystatename}</label>
+                </td>
+                 
+            </tr>
+             <tr>
+
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp;  身份证或企业营业执照照片：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                <#if (usermanagePage.userinfo.userteamtype==0) >
+			       <#else>
+			       <a class="image-popup-vertical-fit" href="../../${usermanagePage.userinfo.userteamimg}" title="">
+							点击查看身份证或企业营业执照照片</a>
+			       </#if>
+                </td>
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 中标类型</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${usermanagePage.userinfo.userwintype}</label>
+                </td>
+            </tr>
+            
+             <tr>
+
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp;  备注：</td>
+                <td style="border:1px   solid #FEDCDC; padding: 10px" colspan="3">
+                    <div style="word-wrap: break-word; word-break: normal;" >${usermanagePage.userinfo.userbz}</div>
+                </td>
+            </tr>
+            
+            </table>
+    <div>&nbsp;&nbsp;</div> 
+        <div>
+         <img alt="" src="../assets/images/dingdanxinxi.png">
+            抢单信息：</div>
+         <table align="center" cellpadding="0" cellspacing="0" style="border:1px   solid #FEDCDC; width:100%; height: 80px;"  >
+            <tr>
+                <td style="border:1px   solid #FEDCDC; width:15%" >&nbsp;&nbsp; 抢单数：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%">
+                         &nbsp;&nbsp; <label>${usermanagePage.userinfo.ordercount}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%"  Width="205px">&nbsp;&nbsp; 成功订单数：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                      &nbsp;&nbsp; <label>${usermanagePage.userinfo.succcount}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 进行中订单数：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%" >
+                   &nbsp;&nbsp; <label>${usermanagePage.userinfo.ingcount}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 失败订单数：</td>
+                <td  style="border:1px   solid #FEDCDC;">
+                   &nbsp;&nbsp; <label>${usermanagePage.userinfo.failcount}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 撤单数：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                &nbsp;&nbsp; <label>${usermanagePage.userinfo.cancelcount}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%"> </td>
+                <td >
+                </td>
+            </tr>
+            </table>
+         <div>&nbsp;</div> 
+        <div>
+        <img alt="" src="../assets/images/rizhi.png">订单信息</div>
+            
+            <#if (usermanagePage.userinfo.orderinfos)?size!=0 >
+            <table class="tablelist" style="border:1px   solid #FEDCDC; width:100%;center;margin-top: 2px" >
+            <thead>
+            <tr>
+            	<th>订单编号</th>
+            	<th>站址编号</th>
+            	<th>站址名称</th>
+            	<th>目标谈址佣金(元)</th>
+            	<th>交单时间</th>
+            	<th>订单状态</th>
+            	<th>下单时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list usermanagePage.userinfo.orderinfos as orderinfo>
+            <tr>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.orderid}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.towerbh}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.towername}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.towerfee}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.towerenddate}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.towerstatename}</td>
+            	<td style="border:1px   solid #FEDCDC;">${orderinfo.toweraddtime}</td>
+            </tr>
+            </#list>
+             
+            </tbody>
+            
+            </table>
+            </#if>
+
+       <div style="margin: 50px 0px 0px 0px;text-align: center;">                
+                   <input type="button" value="返回" onclick="javascript:history.go(-1)"  class="btn">
+                </div>
+    </ul>
+    </div>
+    	<script src="../assets/vendor/js/jquery.min.js"></script>
+		<script src="../assets/vendor/js/jquery-migrate-1.2.1.min.js"></script>
+		<script src="../assets/plugins/magnific-popup/js/magnific-popup.js"></script>
+		<script type="text/javascript" src="../assets/js/ui-lightbox.js"></script>
+</body>
+</html>

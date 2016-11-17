@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.InfoMapper">
+
+	<update id="updateInfo" parameterType="map">
+		update tower_admin
+		set
+		Admin_name=#{name},
+		Admin_phone=#{phone}
+		where ID=#{id}
+		;
+	</update>
+	
+	<select id="checkPwd" parameterType="map" resultType="int">
+		select count(1)
+		from  tower_admin
+		where 1=1
+		and  ID=#{id}
+		and  Admin_psd=#{oldpsd}
+		;
+	</select>
+
+	<update id="updatePwd" parameterType="map">
+		update tower_admin
+		set
+		Admin_psd=#{newpsd}
+		where ID=#{id}
+		;
+	</update>
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.NoticeMapper">
+
+	<select id="getNotices" parameterType="com.tower.common.bean.NoticePage"
+							resultType="com.tower.common.bean.Notice">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY publishtime desc) as rank from
+	  (
+	  select a.ID as id,
+	   (case when len( a.title )>30 then left ( a.title ,27)+'...'
+	    else  a.title 
+	    end ) as title,
+       (case when datalength( a.content )>50 then substring ( a.content,0 ,47)+'...'
+	    else  a.content 
+	    end ) as content,
+	    b.Admin_name as publishername,
+	    CONVERT(varchar, a.publishtime,120) as publishtime
+	    from tower_notice a
+		LEFT JOIN tower_admin b on a.publisher = b.id
+	    where 1=1
+	    <if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and a.title like '%${queryItem.adminName}%'
+		</if>
+		<if
+			test="queryItem.timestart!=null and queryItem.timestart!=''">
+			and a.publishtime >=#{queryItem.timestart}
+		</if>
+		<if test="queryItem.timeend!=null and queryItem.timeend!=''">
+			and a.publishtime <![CDATA[ <= ]]>
+			#{queryItem.timeend}
+		</if>
+	  ) w1)as tm where tm.rank between #{pageNo}*10-9 and #{pageNo}*10;
+	</select>
+	
+	<select id="getNoticesCount" parameterType="com.tower.common.bean.NoticePage" resultType="int">
+	  select count(1)
+	    from tower_notice a
+		LEFT JOIN tower_admin b on a.publisher = b.id
+	    where 1=1
+	    <if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and a.title like '%${queryItem.adminName}%'
+		</if>
+		<if
+			test="queryItem.timestart!=null and queryItem.timestart!=''">
+			and a.publishtime >=#{queryItem.timestart}
+		</if>
+		<if test="queryItem.timeend!=null and queryItem.timeend!=''">
+			and a.publishtime <![CDATA[ <= ]]>
+			#{queryItem.timeend}
+		</if>
+	</select>
+	
+	<select id="getNotice" parameterType="int"
+		resultType="com.tower.common.bean.Notice">
+		select
+		a.id as id,
+		a.title as title,
+		a.content as content,
+		b.Admin_name as publishername,
+	    CONVERT(varchar, a.publishtime,120) as publishtime
+		from tower_notice a
+		LEFT JOIN tower_admin b on a.publisher = b.id
+		where
+		a.ID = #{ID}
+	</select>
+	
+	<update id="changeNotice" parameterType="map">
+		update tower_notice
+		set title=#{title},
+		content=#{content},
+		publishtime=GETDATE()
+		where ID = #{id};
+	</update>
+	
+	<insert id="addNotice" parameterType="map">
+		insert into tower_notice
+		(title,content,publisher,publishtime,url)
+		values
+		(#{title},#{content},#{publisher},GETDATE(),#{url})
+	</insert>
+	
+	<delete id="delNotice" parameterType="map">
+		delete from tower_notice
+		where ID = #{id};
+	</delete>
+	
+</mapper>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.DataTowerMapper">
+
+	<select id="getDataTowers" parameterType="com.tower.common.bean.DataTowerPage"
+		resultType="com.tower.common.bean.DataTower">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY Tower_add_date
+		desc) as rank from
+		(
+		SELECT a.Tower_name as towername,
+		c.City_name as
+		cityname,
+		b.area_name as areaname,
+		case a.Tower_level when 1 then '一级站址'
+		when 2 then '二级站址' when 3 then
+		'三级站址' when 4 then '四级站址' end as
+		towerlevel,
+		a.Tower_fee as towerfee,
+		d.Cancel_count as cancelcount,
+		d.Reject_count as rejectcount,
+		d.Sale_count as selecount,
+		d.View_count
+		as viewcount,
+		d.Time_count as timecount,
+		a.Tower_add_date,
+		a.Tower_rent_fee as towerrentfee,
+		a.Tower_id as towerid,
+		case
+		a.Tower_state
+		when 0 then '未抢单'
+		else (select top(1)s.statename from tower_order_detail d
+		left join tower_order_state s on s.state=d.Tower_state where
+		d.Tower_id=a.id order by d.Tower_add_time desc )
+
+		end as statename,
+		case a.Tower_visible
+		when 0 then '未上架'
+		when 1 then '已上架'
+		when 2 then '站址池'
+		end as towervisible
+		from tower_tower_info a
+		LEFT JOIN
+		tower_area b on a.Tower_area = b.ID
+		LEFT JOIN tower_city c on b.City_id
+		= c.City_id,
+		data_report_tower d
+		where a.ID = d.Tower_id
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and b.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.towername != null and parameter.towername != ''">
+			and a.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towercity != null and parameter.towercity != ''">
+			and c.ID = #{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea != null and parameter.towerarea != 0">
+			and a.Tower_area = #{parameter.towerarea}
+		</if>
+		<if test="parameter.towerlevel != null and parameter.towerlevel != -1">
+			and a.Tower_level = #{parameter.towerlevel}
+		</if>
+		) w1)as tm where tm.rank between #{pageNo}*10-9 and #{pageNo}*10
+		;
+	</select>
+
+	<select id="getDataTowersCount" parameterType="com.tower.common.bean.DataTowerPage"
+		resultType="int">
+		select count(1)
+		from tower_tower_info a
+		LEFT JOIN tower_area b on
+		a.Tower_area = b.ID
+		LEFT JOIN tower_city c on b.City_id = c.City_id,
+		data_report_tower d
+		where a.ID = d.Tower_id
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and b.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.towername != null and parameter.towername != ''">
+			and a.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towercity != null and parameter.towercity != ''">
+			and c.ID = #{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea != null and parameter.towerarea != 0">
+			and a.Tower_area = #{parameter.towerarea}
+		</if>
+		<if test="parameter.towerlevel != null and parameter.towerlevel != -1">
+			and a.Tower_level = #{parameter.towerlevel}
+		</if>
+		;
+	</select>
+
+
+	<select id="getDcDataTowers" parameterType="com.tower.common.bean.DataTowerPage"
+		resultType="map">
+
+		SELECT a.Tower_name as towername,
+		c.City_name as cityname,
+		b.area_name
+		as areaname,
+		case a.Tower_level when 1 then '一级站址' when 2 then '二级站址'
+		when 3 then
+		'三级站址' when 4 then '四级站址' end as towerlevel,
+		a.Tower_fee as
+		towerfee,
+		d.Cancel_count as cancelcount,
+		d.Reject_count as rejectcount,
+		d.Sale_count as selecount,
+		d.View_count as viewcount,
+		d.Time_count as
+		timecount,
+		a.Tower_add_date,
+		a.Tower_rent_fee as towerrentfee,
+		ss.storename as towerstorename,
+		a.Tower_id as towerid,
+		case
+		a.Tower_state
+		when 0 then '未抢单'
+		else (select top(1)s.statename from tower_order_detail d
+		left join tower_order_state s on s.state=d.Tower_state order by
+		d.Tower_add_time desc )
+
+		end as statename,
+		case a.Tower_visible
+		when 0 then '未上架'
+		when 1 then '已上架'
+		when 2 then '站址池'
+		end as towervisible,
+		ct.name as towercreatetypename
+		from tower_tower_info a
+		left join
+		tower_tower_store ss on ss.storeid=a.Tower_store
+		 left join tower_create_type ct on ct.id=a.Tower_create_type
+		LEFT JOIN tower_area b
+		on a.Tower_area = b.ID
+		LEFT JOIN tower_city c on b.City_id = c.City_id,
+		data_report_tower d
+    
+		where a.ID = d.Tower_id
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and b.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.towername != null and parameter.towername != ''">
+			and a.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towercity != null and parameter.towercity != ''">
+			and c.ID = #{parameter.towercity}
+		</if>
+		<if test="parameter.towerarea != null and parameter.towerarea != 0">
+			and a.Tower_area = #{parameter.towerarea}
+		</if>
+		<if test="parameter.towerlevel != null and parameter.towerlevel != -1">
+			and a.Tower_level = #{parameter.towerlevel}
+		</if>
+		;
+	</select>
+
+
+
+
+
+
+	<select id="getTowerStates" parameterType="com.tower.common.bean.DataTowerPage" resultType="map">
+
+		select A.cityname,A.ID ,towervisisblecount,towerqdcount,towerunqdcount,
+
+		ordertargetaddresscount,orderjdcount,ordershingcount,ordercompletecount,txsuccesscount
+		from
+		(select
+		c.ID,
+		c.City_name as cityname,
+
+		(select COUNT(1)
+		from tower_tower_info i1
+		left join tower_area a1 on a1.ID=i1.Tower_area
+		left join tower_city c1 on c1.City_id=a1.City_id
+		where c1.City_id=c.City_id and i1.tower_visible=1) as towervisisblecount,
+		(select COUNT(1)
+		from tower_tower_info i2
+		left join tower_area a2 on a2.ID=i2.Tower_area
+		left join tower_city c2 on c2.City_id=a2.City_id
+		where c2.City_id=c.City_id and i2.Tower_state=1) as towerqdcount,
+
+		(select COUNT(1)
+		from tower_tower_info i3
+		left join tower_area a3 on a3.ID=i3.Tower_area
+		left join tower_city c3 on c3.City_id=a3.City_id
+		where c3.City_id=c.City_id and i3.Tower_state=0 and i3.Tower_visible=1) as
+		towerunqdcount
+
+
+		from
+		tower_city c
+		left join tower_area a on c.City_id=a.City_id
+		left join tower_tower_info t on t.Tower_area=a.ID
+		group by
+		c.City_name,c.ID,c.City_id
+
+		)A
+
+		FULL JOIN
+
+		(
+		select
+		c.ID,
+		c.City_name as cityname,
+
+		(select COUNT(1)
+		from tower_order_detail d1
+		left join tower_tower_info i1 on
+		d1.Tower_id=i1.ID
+		left join tower_area a1 on i1.Tower_area=a1.ID
+		left
+		join tower_city c1 on c1.City_id=a1.City_id
+		where c1.ID=c.ID
+		and
+		d1.Tower_state=19) as ordertargetaddresscount,
+
+		(select COUNT(1)
+		from tower_order_detail d2
+		left join tower_tower_info i2 on
+		d2.Tower_id=i2.ID
+		left join tower_area a2 on i2.Tower_area=a2.ID
+		left
+		join tower_city c2 on c2.City_id=a2.City_id
+		where c2.ID=c.ID
+		and
+		d2.Tower_state=2) as orderjdcount,
+
+		(select COUNT(1)
+		from tower_order_detail d3
+		left join tower_tower_info i3 on
+		d3.Tower_id=i3.ID
+		left join tower_area a3 on i3.Tower_area=a3.ID
+		left
+		join tower_city c3 on c3.City_id=a3.City_id
+		where c3.ID=c.ID
+		and
+		d3.Tower_state in(5,7,22,8)) as ordershingcount,
+
+		(select COUNT(1)
+		from tower_order_detail d3
+		left join tower_tower_info i3 on
+		d3.Tower_id=i3.ID
+		left join tower_area a3 on i3.Tower_area=a3.ID
+		left
+		join tower_city c3 on c3.City_id=a3.City_id
+		where c3.ID=c.ID
+		and
+		d3.Tower_state in(9)) as ordercompletecount,
+		(select COUNT(1)
+		from tower_user_tx_source s4
+		left join tower_user_tx_record r4 on
+		s4.Tx_id=r4.id
+		left join tower_order_detail o4 on o4.ID=s4.Order_id
+		left join tower_tower_info i4 on i4.ID=o4.Tower_id
+		left join tower_area
+		a4 on a4.ID=i4.Tower_area
+		left join tower_city c4 on
+		c4.City_id=a4.City_id
+		where r4.state in (3,5) and c4.City_id=c.City_id)
+		as txsuccesscount
+
+		from tower_city c
+		left join tower_area a on c.City_id=a.City_id
+		left join tower_tower_info i on i.Tower_area=a.ID
+		left join
+		tower_order_detail d on d.Tower_id=i.ID
+		group by
+		c.City_name,c.ID,c.City_id
+
+		)B
+		on A.ID=B.ID
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and A.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+
+
+
+	</select>
+
+</mapper>

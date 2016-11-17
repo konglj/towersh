@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.DataUserMapper">
+
+	<select id="getDataUsers" parameterType="com.tower.common.bean.DataUserPage"
+		resultType="com.tower.common.bean.DataUser">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY addtime desc) as
+		rank from
+		(
+		SELECT a.User_name as username,
+		a.User_tele as usertele,
+		c.City_name as cityname,
+		(select count(1)from user_favourite_tower f where f.Wx_id=a.Wx_id) as
+		gzcount,
+		d.Order_count as dqcount,
+		d.Succ_count as succcount,
+		d.Reject_count as rejectcount,
+		d.Cancel_count as cancelcount,
+		d.Time_count as timecount,
+		a.Add_time as addtime
+		from Tower_User_info a
+		LEFT JOIN Tower_city c on a.User_area = c.ID
+		LEFT JOIN tower_user_order_info d on a.Wx_id = d.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username != null and parameter.username != ''">
+			and a.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele != null and parameter.usertele != ''">
+			and a.User_tele like '%${parameter.usertele}%'
+		</if>
+		<if test="parameter.usercity != null and parameter.usercity != ''">
+			and c.ID = #{parameter.usercity}
+		</if>
+		) w1)as tm where tm.rank between #{pageNo}*10-9 and #{pageNo}*10
+		;
+	</select>
+
+
+	<select id="getDataUsersCount" parameterType="com.tower.common.bean.DataUserPage"
+		resultType="int">
+		select count(1)
+		from Tower_User_info a
+		LEFT JOIN Tower_city c on a.User_area = c.ID
+		LEFT JOIN tower_user_order_info d on a.Wx_id = d.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username != null and parameter.username != ''">
+			and a.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele != null and parameter.usertele != ''">
+			and a.User_tele like '%${parameter.usertele}%'
+		</if>
+		<if test="parameter.usercity != null and parameter.usercity != ''">
+			and c.ID = #{parameter.usercity}
+		</if>
+		;
+	</select>
+	<select id="getDcDataUsers" parameterType="com.tower.common.bean.DataUserPage"
+		resultType="map">
+
+		SELECT a.User_name as username,
+		a.User_tele as usertele,
+		c.City_name as cityname,
+		(select count(1)from user_favourite_tower f where f.Wx_id=a.Wx_id) as
+		gzcount,
+		d.Order_count as dqcount,
+		d.Succ_count as succcount,
+		d.Reject_count as rejectcount,
+		d.Cancel_count as cancelcount,
+		d.Time_count as timecount,
+		a.Add_time as addtime
+		from Tower_User_info a
+		LEFT JOIN Tower_city c on a.User_area = c.ID
+		LEFT JOIN tower_user_order_info d on a.Wx_id = d.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username != null and parameter.username != ''">
+			and a.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele != null and parameter.usertele != ''">
+			and a.User_tele like '%${parameter.usertele}%'
+		</if>
+		<if test="parameter.usercity != null and parameter.usercity != ''">
+			and c.ID = #{parameter.usercity}
+		</if>
+		order by a.Add_time desc
+		;
+
+	</select>
+</mapper>

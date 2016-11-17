@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.OrderEvaluateMapper">
+
+	<select id="getOrderEvaluateByOrderId" parameterType="map"
+		resultType="int">
+		select count(1)
+		from tower_order_evaluate
+		where 1=1
+		and
+		orderid=#{orderid}
+	</select>
+	<insert id="insertAdminEvaluate" parameterType="map">
+		insert into
+		tower_order_evaluate
+		(orderid,admincontent,admintime)
+		values
+		(#{orderid},#{admincontent},GETDATE())
+		;
+	</insert>
+	<update id="updateAdminEvaluate" parameterType="map">
+		update
+		tower_order_evaluate
+		set admincontent=#{admincontent},
+		admintime=GETDATE()
+		where orderid=#{orderid}
+		;
+	</update>
+	<insert id="insertUserEvaluate" parameterType="map">
+		insert into
+		tower_order_evaluate
+		(orderid,usercontent,usertime)
+		values
+		(#{orderid},#{usercontent},GETDATE())
+		;
+	</insert>
+	<update id="updateUserEvaluate" parameterType="map">
+		update
+		tower_order_evaluate
+		set usercontent=#{usercontent},
+		usertime=GETDATE()
+		where orderid=#{orderid}
+		;
+	</update>
+
+</mapper>

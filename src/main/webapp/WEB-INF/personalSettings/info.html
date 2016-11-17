@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>铁塔选址后台---山东百传网络</title>
+
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.auto-style4 {
+	text-align: right;
+	height: 10px
+}
+
+.auto-style8 {
+	text-align: left;
+		height: 10px
+}
+
+.auto-style10 {
+	width: 46px;
+}
+
+.auto-style11 {
+	width: 82px;
+	height: 69px;
+}
+
+.auto-style12 {
+	width: 46px;
+	height: 69px;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="../index.html">首页</a></li>
+			<li><a href="#">个人设置</a></li>
+		</ul>
+	</div>
+
+	<div class="formbody">
+
+
+		<div id="usual1" class="usual">
+
+			<div class="itab">
+				<ul>
+					<li><a href="#tab1" class="selected">修改管理员个人信息</a></li>
+					<li><a href="#tab2">修改管理员密码</a></li>
+				</ul>
+			</div>
+
+			<form id="form_info">
+				<div id="tab1" class="tabson">
+
+					<ul class="forminfo">
+						<table align="center" 
+							class="filetable"
+							style="border: 1px none #FEDCDC; height: 300px;width: 100%">
+							<tr>
+								<td class="auto-style4">管理员账户名：</td>
+								<td class="auto-style8"><label id="uid">${sysuserInfo.adminId}</label>
+								</td>
+							</tr>
+
+
+							<tr>
+								<td class="auto-style4">管辖区域：</td>
+								<td class="auto-style8"><label id="">${sysuserInfo.amdminArea}</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="auto-style4">姓名：</td>
+								<td class="auto-style8"><input id="name" class="dfinput"
+									style="width: 180pxs;height:30px" type="text"
+									value="${sysuserInfo.amdminName}" name="name" />
+									<font color="red">建议姓名以职务+姓名的方式,如省铁塔 张三</font>
+									</td>
+							</tr>
+							<tr>
+								<td class="auto-style4">联系电话：</td>
+								<td class="auto-style8"><input id="phone" class="dfinput"
+								style="width: 180pxs;height:30px"
+									type="text"
+									value="${sysuserInfo.amdminPhone}" name="phone" /></td>
+							</tr>
+							<tr>
+								<td class="auto-style11"></td>
+								<td class="auto-style12"><input class="btn" type="button"
+									value="修改个人信息" onclick="updateinfo()"></input></td>
+							</tr>
+						</table>
+					</ul>
+
+				</div>
+
+			</form>
+			<form id="form_pwd" method="post">
+				<div id="tab2" class="tabson">
+					<ul class="forminfo">
+						<table align="center" cellpadding="0" cellspacing="0"
+							class="filetable"
+							style="border: 1px none #FEDCDC; height: 300px;width: 100%">
+							<tr>
+								<td class="auto-style4">管理员账户名：</td>
+								<td class="auto-style8"><label id="uid">${sysuserInfo.adminId}</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="auto-style4">原密码：</td>
+								<td class="auto-style8"><input id="oldpsd" class="dfinput"
+									width="180" height="25" type="password" name="oldpsd" /></td>
+							</tr>
+							<tr>
+								<td class="auto-style4">新密码：</td>
+								<td class="auto-style10"><input id="newpsd" class="dfinput"
+									width="180" height="25" type="password" name="newpsd" /></td>
+							</tr>
+							<tr>
+									<td class="auto-style4">再次输入新密码：</td>
+									<td class="auto-style10"><input id="againpsd"
+										class="dfinput" width="180" height="25" type="password"
+										name="againpsd" /></td>
+									</tr>
+									
+									
+									<tr>
+										<td class="auto-style11"></td>
+										<td class="auto-style12"><input class="btn" type="button"
+											value="修改密码" onclick="updatePwd()"></input></td>
+									</tr>
+						</table>
+					</ul>
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script type="text/javascript" src="../assets/js/jquery.idTabs.min.js"></script>
+	<script type="text/javascript" src="../assets/js/select-ui.min.js"></script>
+	<script type="text/javascript" src="../assets/editor/kindeditor.js"></script>
+
+	<!-- Plugins JS-->
+	<script src="../assets/plugins/jquery-validation/js/jquery.validate.js"></script>
+	<script src="../assets/js/jquery.form.js"></script>
+	<script type="text/javascript"
+		src="../assets/plugins/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript"
+		src="../assets/js/page/personalSettings/info.js"></script>
+	<script type="text/javascript">
+	    $("#usual1 ul").idTabs();
+    </script>
+
+	<script type="text/javascript">
+	
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+
+	<script type="text/javascript">
+      KE.show({
+          id: 'content7',
+          cssPath: './index.css'
+      });
+	</script>
+	<script type="text/javascript">
+    $(document).ready(function (e) {
+        $(".select1").uedSelect({
+            width: 167 
+             
+        });
+        $(".select2").uedSelect({
+            width: 100 
+        });
+        $(".select3").uedSelect({
+            width: 100 
+        });
+    });
+	</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+

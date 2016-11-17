@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/jquery-confirm.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+
+select {
+	width: 120px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">留言管理</a></li>
+    <li><a href="#">编辑留言</a></li>
+    </ul>
+    </div>
+    
+    <div class="formbody">
+    
+    
+    <div id="usual1" class="usual"> 
+    
+    <div class="itab">
+  	<ul> 
+    <li><a href="#tab1" class="selected" >修改留言</a></li> 
+    
+  	</ul>
+    </div> 
+    
+  	<div id="tab1" class="tabson">
+    
+   
+    <form id="form_editmessage" >
+    <ul class="forminfo">
+   <table align="center" cellpadding="0" cellspacing="0" class="filetable" style="border:1px none #FEDCDC; height: 240px;">
+            <tr>
+                <td class="auto-style4">标题：</td>
+                <td class="auto-style8">
+                   <input class="dfinput" style="width: 400px;height: 25px" id="title" name="title" value="${messagePage.message.title}">
+                </td>
+            </tr>
+               
+            <tr>
+                <td class="auto-style4">内容：</td>
+                <td class="auto-style8">
+                   <textarea id="content" name="content" rows="5" cols="50" style="border: 1px solid #FEDCDC; margin-top: 2px;width: 400px;height: 150px">${messagePage.message.content}</textarea>
+                </td>
+            </tr>
+            <input type="hidden" id="id" name="id" value="${messagePage.message.id}">
+            <tr>
+               <td class="auto-style4"></td>
+                <td class="auto-style8"></td>
+            </tr>
+            <tr>
+            
+              <td class="auto-style4"></td>
+               <td class="auto-style8">
+                    <input type="button" style="margin-left: 30px" value="修改留言" onclick="editmessage()"  class="btn">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="返回" onclick="javascript:window.location.href='message.html'"  class="btn">
+                </td>
+            </tr>
+            </table>
+    </ul>
+    </form>
+    
+    </div> 
+    </div>
+    
+<script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript" src="../assets/js/jquery.idTabs.min.js"></script>
+<script type="text/javascript" src="../assets/js/select-ui.min.js"></script>
+<script type="text/javascript" src="../assets/editor/kindeditor.js"></script>
+<script type="text/javascript" src="../assets/js/jquery-confirm.js"></script>
+<script type="text/javascript" src="../assets/plugins/jquery-validation/js/jquery.validate.js"></script>
+<script type="text/javascript" src="../assets/js/page/common/area.js"></script>
+<script type="text/javascript" src="../assets/js/page/message/message.js"></script>
+<script type="text/javascript">
+
+   <script type="text/javascript">
+       KE.show({
+           id: 'content7',
+           cssPath: './index.css'
+       });
+  </script>
+  
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $(".select1").uedSelect({
+            width: 167 
+             
+        });
+        $(".select2").uedSelect({
+            width: 100 
+        });
+        $(".select3").uedSelect({
+            width: 200,height:25
+        });
+    });
+</script>
+    <style type="text/css">
+        .auto-style4 {
+            text-align: right;
+            height: 40px;
+            width: 147px;
+        }
+        .SELECT {
+        border: 1px solid #629ACD;
+            FONT-SIZE: 9pt; FONT-FAMILY: "Arial", "Helvetica", "sans-serif"; background-color: #EBF5FD; vertical-align: text-button;
+}
+        .auto-style8 {
+            text-align: left;
+        }
+                 
+    </style>
+    
+    
+</body>
+</html>

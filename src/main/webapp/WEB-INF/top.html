@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+
+<body style="background: url(assets/images/topbg.gif) repeat-x;">
+
+	<div class="topleft">
+		<a href="main.html" target="_parent"><img
+			src="assets/images/logo.png" title="系统首页" /></a>
+	</div>
+
+	 <ul class="nav">
+	 <#if (info.powerw?index_of("Z1"))!=-1>
+    <li><a href="main.html"  target="_parent"><img src="assets/images/icon01.png" title="首页" /><h2>首页</h2></a></li>
+    </#if>
+    <#if (info.powerw?index_of("Z2"))!=-1>
+    <li><a href="personalSettings/info.html" target="rightFrame"><img src="assets/images/icon06.png" title="个人设置" /><h2>个人设置</h2></a></li>
+ </#if>
+    <#if (info.powerw?index_of("Z3"))!=-1>
+   <li><a href="manager/manager.html?isback=0" target="rightFrame"><img src="assets/images/icon13.png" title="管理员管理" /><h2>管理员管理</h2></a></li>
+      </#if>
+    <#if (info.powerw?index_of("Z4"))!=-1>        
+    <li><a href="report.html" target="rightFrame"><img src="assets/images/icon05.png" title="报表管理" /><h2>报表管理</h2></a></li>
+      </#if>
+    <#if (info.powerw?index_of("Z5"))!=-1>
+     <li><a href="data.html"  target="rightFrame"><img src="assets/images/icon04.png" title="数据分析" /><h2>数据分析</h2></a></li>
+ </#if>
+   <#if (info.powerw?index_of("Z6"))!=-1>
+    <li><a href="twnotice/notice.html?isback=0"  target="rightFrame"><img src="assets/images/icon03.png" title="数据分析" /><h2>推送管理</h2></a></li>
+    </#if>
+    </ul>
+
+	<div class="topright">
+		<ul>
+			<li><span><img src="assets/images/help.png" title="帮助"
+					class="helpimg" /></span>
+			<a href="./doc/tower_operation.doc" download="铁塔平台后台操作说明" target="_blank">帮助</a></li>
+				<li><a href="http://www.bestrun.net" target="_blank">关于</a></li>
+			<li><a href="login.html" target="_parent">退出</a></li>
+		</ul>
+
+		<div class="user">
+			<span>${info.name}</span>
+		</div>
+
+	</div>
+
+
+
+	<script language="JavaScript" src="assets/js/jquery.js"></script>
+	<script type="text/javascript">
+$(function(){	
+	//顶部导航切换
+	$(".nav li a").click(function(){
+		$(".nav li a.selected").removeClass("selected")
+		$(this).addClass("selected");
+	})	
+})	
+</script>
+
+</body>
+</html>

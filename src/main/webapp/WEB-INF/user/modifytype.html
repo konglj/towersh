@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/select1.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.auto-style1 {
+	text-align: left;
+}
+
+.auto-style2 {
+	text-align: left;
+	font-size: small;
+	height: 72px;
+}
+
+.auto-style7 {
+	text-align: left;
+	font-size: 13px;
+	height: 40px;
+	width: 220px;
+}
+
+.auto-style13 {
+	font-size: 13px;
+	height: 40px;
+	width: 20%;
+	text-align:left;
+}
+
+.auto-style15 {
+	text-align: left;
+	font-size: 13px;
+	height: 40px;
+}
+
+.auto-style17 {
+	text-align: right;
+	font-size: 13px;
+}
+
+.auto-style20 {
+	text-align: right;
+	font-size: 13px;
+	height: 40px;
+}
+
+.auto-style21 {
+	text-align: left;
+	height: 40px;
+}
+
+.dfinput {
+	
+}
+
+.auto-style22 {
+	text-align: left;
+	height: 40px;
+	width: 220px;
+}
+
+.dfinput {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px
+}
+
+
+
+.select_mag {
+	margin-right: 0px
+}
+ td{
+        border: 1px solid #FEDCDC;
+        }
+
+</style>
+</head>
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="#">用户管理</a></li>
+			<li><a href="#">修改用户类型</a></li>
+		</ul>
+	</div>
+
+	<div class="formbody">
+
+		<div class="formtitle">
+			<span>修改用户类型</span>
+		</div>
+
+
+
+		<form id="form_modifytype">
+			<table align="center" cellpadding="0" cellspacing="0"
+				class="filetable" style="border: 1px; border-color: #FEDCDC;width: 800px;margin-left: 100px">
+				<tr>
+					<td class="auto-style13">用户姓名：</td>
+					<td class="auto-style22"><label>${usermanagePage.userinfo.username}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="auto-style13">电话：</td>
+					<td class="auto-style7"><label>${usermanagePage.userinfo.usertele}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="auto-style13">所属地区：</td>
+					<td class="auto-style7"><label>${usermanagePage.userinfo.cityname}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="auto-style13">用户类型：</td>
+					<td class="auto-style7"><select id="usertype" name="usertype" style="width: 120px">
+							<optgroup label="选择用户类型">
+							<#list usermanagePage.userTypes as type >
+							<option value="${type.id}" <#if
+								(usermanagePage.userinfo.usertype==type.id)
+								>selected="selected"</#if>>${type.typename}</option>
+							</#list>
+							
+							</optgroup>
+							
+							
+					</select></td>
+					
+				</tr>
+				
+			</table>
+			<div style="margin: 50px 0px 0px 0px;text-align: center;">
+						<input type="button" value="修改此用户类型" onclick="modifytype()"
+						class="btn">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="返回"
+						onclick="javascript:window.location.href='usermanage.html'"
+						class="btn">
+					</div>
+			<input type="hidden" value="${usermanagePage.userinfo.wxid}"
+				name="wxid" id="wxid">
+		</form>
+	</div>
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script type="text/javascript"
+		src="../assets/js/page/user/usermanage.js"></script>
+</body>
+</html>

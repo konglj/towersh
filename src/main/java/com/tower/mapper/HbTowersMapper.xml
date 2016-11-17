@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tower.mapper.HbTowersMapper">
+
+	
+	<select id="getTowers" parameterType="com.tower.common.bean.QueryTerms" 
+	  										resultType="com.tower.common.bean.Tower">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY towervisibletime desc) as rank from
+	  (
+	  select
+	  t.ID as id,
+	   (case when len(t.Tower_name)>17 then left (t.Tower_name,15)+'...'
+	    else t.Tower_name
+	    end ) 
+	   as towername,
+	  c.City_name as cityname,
+	  a.area_name as areaname,
+	  (case when len(t.Tower_address)>20 then left (t.Tower_address,18)+'...'
+	    else t.Tower_address
+	    end ) as toweraddress,
+	  t.Tower_level as towerlevel,
+	  t.Tower_fee as towerfee,
+	  t.Tower_add_date,
+	  t.Tower_state as towerstate,
+	  CONVERT(varchar,
+		t.Tower_visible_time, 120 ) as towervisibletime
+	  
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	
+	  where 1=1
+	  and t.Tower_visible = 1
+	  and t.Tower_is_hb=1
+	  <!-- admin -->
+	 <if test="admincity!=null and admincity!=''">
+	  and a.City_id=#{admincity}
+	  </if>
+	  <if test="adminareas!=null">
+	  and a.ID in(
+	  <foreach collection="adminareas" item="area" separator=",">
+	   #{area.id}
+	  </foreach>
+	  )
+	  </if>
+	 <!-- admin end -->
+	  <if test="towername != null and towername != ''">
+	  and t.Tower_name like '%${towername}%'
+	  </if>
+	  <if test="cityid != null and cityid != ''">
+	  and c.City_id = #{cityid}
+	  </if>
+	  <if test="areaid != null and areaid != 0">
+	  and t.Tower_area = #{areaid}
+	  </if>
+	  <if test="towertype != null and towertype != 0">
+	  and t.Tower_level = #{towertype}
+	  </if>
+	  <if test="towerstate != null and towerstate != -1">
+	  and t.Tower_state = #{towerstate}
+	  </if>
+	  <if test="fromdate != null and fromdate != ''">
+	  and t.Tower_visible_time >= #{fromdate}
+	  </if>
+	  <if test="todate != null and todate != ''">
+	  and t.Tower_visible_time <![CDATA[ <= ]]> #{todate}
+	  </if>
+	  ) w1)as tm where tm.rank between #{pageindex}*10-9 and #{pageindex}*10
+	  ;
+	</select>
+	
+	<select id="getTowersCount" parameterType="com.tower.common.bean.QueryTerms"
+											 resultType="int">
+	  select count(1)
+		
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	
+	  where 1=1
+	  and t.Tower_visible = 1
+	    and t.Tower_is_hb=1
+	  <!-- admin -->
+	 <if test="admincity!=null and admincity!=''">
+	  and a.City_id=#{admincity}
+	  </if>
+	  <if test="adminareas!=null">
+	  and a.ID in(
+	  <foreach collection="adminareas" item="area" separator=",">
+	   #{area.id}
+	  </foreach>
+	  )
+	  </if>
+	 <!-- admin end -->
+	  <if test="towername != null and towername != ''">
+	  and t.Tower_name like '%${towername}%'
+	  </if>
+	  <if test="cityid != null and cityid != ''">
+	  and c.City_id = #{cityid}
+	  </if>
+	  <if test="areaid != null and areaid != 0">
+	  and t.Tower_area = #{areaid}
+	  </if>
+	  <if test="towertype != null and towertype != 0">
+	  and t.Tower_level = #{towertype}
+	  </if>
+	  <if test="towerstate != null and towerstate != -1">
+	  and t.Tower_state = #{towerstate}
+	  </if>
+	  <if test="fromdate != null and fromdate != ''">
+	  and t.Tower_visible_time >= #{fromdate}
+	  </if>
+	  <if test="todate != null and todate != ''">
+	  and t.Tower_visible_time <![CDATA[ <= ]]> #{todate}
+	  </if>
+		;
+	</select>
+	
+	<select id="getNoTowers" parameterType="com.tower.common.bean.QueryTerms" 
+	  										resultType="com.tower.common.bean.Tower">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY toweradddate desc) as rank from
+	  (
+	  select
+	  t.ID as id,
+	   (case when len(t.Tower_name)>17 then left (t.Tower_name,15)+'...'
+	    else t.Tower_name
+	    end ) 
+	   as towername,
+	  c.City_name as cityname,
+	  a.area_name as areaname,
+	   (case when len(t.Tower_address)>20 then left (t.Tower_address,18)+'...'
+	    else t.Tower_address
+	    end ) as toweraddress,
+	  t.Tower_level as towerlevel,
+	  t.Tower_fee as towerfee,
+	   CONVERT(varchar,
+		t.Tower_add_date, 120 ) as toweradddate,
+	  t.Tower_state as towerstate
+	  
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	
+	  where 1=1
+	  and t.Tower_visible = 0
+	    and t.Tower_is_hb=1
+	  <!-- admin -->
+	 <if test="admincity!=null and admincity!=''">
+	  and a.City_id=#{admincity}
+	  </if>
+	  <if test="adminareas!=null">
+	  and a.ID in(
+	  <foreach collection="adminareas" item="area" separator=",">
+	   #{area.id}
+	  </foreach>
+	  )
+	  </if>
+	 <!-- admin end -->
+	  <if test="towername != null and towername != ''">
+	  and t.Tower_name like '%${towername}%'
+	  </if>
+	  <if test="cityid != null and cityid != ''">
+	  and c.City_id = #{cityid}
+	  </if>
+	  <if test="areaid != null and areaid != 0">
+	  and t.Tower_area = #{areaid}
+	  </if>
+	  <if test="towertype != null and towertype != 0">
+	  and t.Tower_level = #{towertype}
+	  </if>
+	  <if test="towerstate != null and towerstate != -1">
+	  and t.Tower_state = #{towerstate}
+	  </if>
+	  <if test="fromdate != null and fromdate != ''">
+	  and t.Tower_add_date >= #{fromdate}
+	  </if>
+	  <if test="todate != null and todate != ''">
+	  and t.Tower_add_date <![CDATA[ <= ]]> #{todate}
+	  </if>
+	  
+	  ) w1)as tm where tm.rank between #{pageindex}*10-9 and #{pageindex}*10
+	  ;						
+	</select>
+	
+	<select id="getNoTowersCount" parameterType="com.tower.common.bean.QueryTerms"
+											 resultType="int">
+	  select count(1)
+		
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	
+	  where 1=1
+	  and t.Tower_visible = 0
+	    and t.Tower_is_hb=1
+	  <!-- admin -->
+	 <if test="admincity!=null and admincity!=''">
+	  and a.City_id=#{admincity}
+	  </if>
+	  <if test="adminareas!=null">
+	  and a.ID in(
+	  <foreach collection="adminareas" item="area" separator=",">
+	   #{area.id}
+	  </foreach>
+	  )
+	  </if>
+	 <!-- admin end -->
+	  <if test="towername != null and towername != ''">
+	  and t.Tower_name like '%${towername}%'
+	  </if>
+	  <if test="cityid != null and cityid != ''">
+	  and c.City_id = #{cityid}
+	  </if>
+	  <if test="areaid != null and areaid != 0">
+	  and t.Tower_area = #{areaid}
+	  </if>
+	  <if test="towertype != null and towertype != 0">
+	  and t.Tower_level = #{towertype}
+	  </if>
+	  <if test="towerstate != null and towerstate != -1">
+	  and t.Tower_state = #{towerstate}
+	  </if>
+	  <if test="fromdate != null and fromdate != ''">
+	  and t.Tower_add_date >= #{fromdate}
+	  </if>
+	  <if test="todate != null and todate != ''">
+	  and t.Tower_add_date <![CDATA[ <= ]]> #{todate}
+	  </if>
+		;
+	</select>
+	
+	<insert id="addTower" parameterType="com.tower.common.bean.AddTowerInfo">
+		insert tower_tower_info
+		(Tower_id, Tower_idefined, Tower_name, Tower_who,
+		 Tower_area, Tower_address, Tower_level, Tower_fee,
+		 Tower_state, Tower_type, Tower_large, Tower_j,Tower_w,
+		 Tower_manager,Tower_manager_name, Tower_info, Tower_visible, Tower_is_hb,
+		 Tower_add_user, Tower_add_date, Tower_order_id, Tower_img)
+		
+		values
+		(#{towerid}, #{toweridefined}, #{towername}, #{towerwho},
+		 #{towerarea}, #{toweraddress}, #{towerlevel}, #{towerfee},
+		 #{towerstate}, #{towertype}, #{towerlarge}, #{towerj}, #{towerw},
+		 #{towermanager},#{towermanagername}, #{towerinfo}, #{towervisible}, #{towerhb},
+		 #{toweradduser}, GETDATE(), #{towerorderid}, #{towerimg})
+		;
+	</insert>
+	
+	<select id="getAreaById" parameterType="map"
+											 resultType="com.tower.common.bean.Area">
+		select *
+		from 
+		tower_area
+		where ID = #{id};
+	</select>
+	
+	
+	<update id="updateTowerVisible" parameterType="map">
+	 update tower_tower_info
+	 set 
+	 <if test="visible==0">
+	   Tower_visible_time=NULL,
+	 </if>
+	  <if test="visible==1">
+	   Tower_visible_time=GETDATE(),
+	 </if>
+	 Tower_visible=#{visible}
+	 
+	 where
+	 1=1
+	 and ID in(
+	  <foreach collection="ids" item="id" separator=",">
+	    #{id}
+	  </foreach>
+	 )
+	 <if test="visible==0">
+	  and Tower_state=0
+	 </if>
+	
+	
+	
+	</update>
+	<delete id="delTower" parameterType="map">
+	 delete from tower_tower_info
+	 where 1=1
+	 and 
+	 ID in(
+	  <foreach collection="ids" item="id" separator=",">
+	    #{id}
+	  </foreach>
+	 )
+	</delete>
+	
+	<select id="getTowerInfo" parameterType="int" resultType="com.tower.common.bean.Tower">
+	  select 
+	  t.ID as id,
+	  t.Tower_idefined   as toweridefined,
+	  t.Tower_name as towername,
+	  t.Tower_who as towerwho,
+	  t.Tower_address as toweraddress,
+	  t.Tower_state as towerstate,
+	  case t.Tower_state
+	  when 0 then '未抢单'
+	  when 1 then '已抢单'
+	  end as towerstatename,
+	  t.Tower_large as towerlarge,
+	  t.Tower_fee as towerfee,
+	  t.Tower_type as towertype,
+	  p.Tower_type_name as towertypename,
+	  p.Tower_type_img as towertypeimg,
+	  t.Tower_img as towerimg,
+	  t.Tower_id as towerid,
+	  t.Tower_j as towerj,
+	  t.Tower_w as towerw,
+	  t.Tower_manager as towermanager,
+	  t.Tower_manager_name as towermanagername,
+	   CONVERT(varchar,
+	  t.Tower_add_date, 120 ) as toweradddate,
+		   CONVERT(varchar,
+	  t.Tower_visible_time, 120 ) as towervisibletime,
+	  t.Tower_visible as towervisible,
+	  t.Tower_info as towerinfo,
+	   case t.Tower_level
+	   when 1 then '一级站址'
+	   when 2 then '二级站址'
+	   when 3 then '三级站址'
+	   when 4 then '四级站址'
+	   end as towerlevelname,
+	  c.City_name as cityname,
+	  c.City_id as cityid,
+	  a.area_name as areaname,
+	  a.id as areaid
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	  left join tower_tower_type p on p.ID=t.Tower_type
+	  
+	  where 1=1
+	  and t.ID=#{towerid}
+	
+	</select>
+	
+	<select id="getareabyid" parameterType="int" resultType="String">
+		select area_id
+		from tower_area
+		where id = #{area};
+	</select>
+	
+	<select id="getareaorder" parameterType="map" resultType="map">
+		select count(0) as count, max(orderno) as orderno
+		from tower_id_areaorder
+		where area = #{area}
+		  and city = #{city};
+	</select>
+	
+	<update id="updateareaorder" parameterType="map">
+		update tower_id_areaorder
+		   set orderno = orderno + 1
+		where area = #{area}
+		  and city = #{city};
+	</update>
+	
+	<insert id="insertareaorder" parameterType="map">
+		insert tower_id_areaorder
+		(area, city, orderno)
+		values
+		(#{area},#{city},1)
+		;
+	</insert>
+	
+	<update id="updateTower" parameterType="com.tower.common.bean.AddTowerInfo">
+	 update tower_tower_info
+	 set Tower_name=#{towername},
+	 Tower_address=#{toweraddress},
+	 Tower_who=#{towerwho},
+	 Tower_fee=#{towerfee},
+	 Tower_manager=#{managerphone},
+	 Tower_manager_name=#{managername},
+	 Tower_type=#{towertype},
+	 Tower_large=#{towerlarge},
+	 Tower_area=#{towerarea},
+	 Tower_level=#{towerlevel},
+	 Tower_info=#{towerinfo},
+	 Tower_j=#{towerj},
+	 Tower_w=#{towerw},
+	 Tower_idefined=#{toweridefined}
+	 where ID=#{id}
+	 ;
+	 
+	</update>
+	
+	<select id="getTowertype" resultType="com.tower.common.bean.TowerType">
+	  select 
+	  ID as id,
+	  Tower_type_name as towertypename,
+	  Tower_type_img as towertypeimg
+	  from tower_tower_type
+	  ;
+	</select>
+	
+	
+	<select id="dcTowers" parameterType="com.tower.common.bean.QueryTerms"
+											 resultType="map">
+	  select 
+	  t.Tower_id as towerid,
+	  t.Tower_idefined as toweridefined,
+	  t.Tower_name as towername,
+	  t.Tower_who as towerwho,
+	  c.City_name as cityname,
+	  a.area_name as areaname,
+	  t.Tower_address as toweraddress,
+	  case t.Tower_level 
+	  when 1 then '一级站址'
+	  when 2 then '二级站址'
+	  when 3 then '三级站址'
+	  when 4 then '四级站址'
+	  end as towerlevelname,
+	  t.Tower_fee as towerfee,
+	
+	  case t.Tower_state
+	  when 1 then '已抢单'
+	  when 0 then '未抢单'
+	  end  as towerstatename,
+	  p.Tower_type_name as towertypename,
+	  t.Tower_large as towerlarge,
+	  t.Tower_j+'-'+t.Tower_w as towerj,
+	  t.Tower_manager as towermanager,
+	  t.Tower_manager_name as towermanagername,
+	  t.Tower_info as towerinfo,
+	  CONVERT(varchar,
+		 t.Tower_add_date, 120 ) as toweradddate
+	 	
+	  from tower_tower_info t
+	  left join tower_area a on a.id=t.Tower_area
+	  left join tower_city c on a.City_id=c.City_id
+	  left join tower_tower_type p on p.ID=t.Tower_type
+	
+	  where 1=1
+	  and t.Tower_visible = #{towervisible}
+	  and t.Tower_is_hb=1
+	  <!-- admin -->
+	 <if test="admincity!=null and admincity!=''">
+	  and a.City_id=#{admincity}
+	  </if>
+	  <if test="adminareas!=null">
+	  and a.ID in(
+	  <foreach collection="adminareas" item="area" separator=",">
+	   #{area.id}
+	  </foreach>
+	  )
+	  </if>
+	 <!-- admin end -->
+	  <if test="towername != null and towername != ''">
+	  and t.Tower_name like '%${towername}%'
+	  </if>
+	  <if test="cityid != null and cityid != ''">
+	  and c.City_id = #{cityid}
+	  </if>
+	  <if test="areaid != null and areaid != 0">
+	  and t.Tower_area = #{areaid}
+	  </if>
+	  <if test="towertype != null and towertype != 0">
+	  and t.Tower_level = #{towertype}
+	  </if>
+	  <if test="towerstate != null and towerstate != -1">
+	  and t.Tower_state = #{towerstate}
+	  </if>
+	  <if test="fromdate != null and fromdate != ''">
+	  and t.Tower_add_date >= #{fromdate}
+	  </if>
+	  <if test="todate != null and todate != ''">
+	  and t.Tower_add_date <![CDATA[ <= ]]> #{todate}
+	  </if>
+		;
+	</select>
+	
+	
+	<select id="getTowerArea" parameterType="map" resultType="map" >
+	
+	  select 
+	   t.Tower_area as area,
+	   c.City_id as city
+	   from 
+	  tower_tower_info t
+	  left join tower_area a on a.ID=t.Tower_area
+	  left join tower_city c on c.City_id=a.City_id
+	  where 1=1
+	  and t.ID=(select Tower_id from tower_order_detail where ID=#{orderid})
+	  ;
+	</select>
+	
+	
+	
+</mapper>

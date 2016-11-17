@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>铁塔选址后台---山东百传网络</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.dfinput {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px
+}
+
+select {
+	width: 140px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+.select_mag{
+    margin-right: 0px
+}
+</style>
+</head>
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="../index.html">首页</a></li>
+			<li><a href="#">留言管理</a></li>
+		</ul>
+	</div>
+
+	<div class="rightinfo">
+  	<form id="form_messagemanage" action="message.html" method="post" >
+		<div class="tools" style="margin-top: 20px;margin-bottom: 0px">
+		
+			<ul class="tools">
+				<li>
+				留言人： <input type="text" name="queryItem.adminName" value="${(messagePage.queryItem.adminName)!!}" class="dfinput" />
+				       用户角色： <select id="adminPower" name="queryItem.adminPower">
+				         <#if ((messagePage.powers)?size!=1)>
+					          <option value="0">全部</option>
+					    </#if>
+					    <#list messagePage.powers as power>
+					         <option value="${power.id}" <#if (messagePage.queryItem.adminPower==power.id) >selected="selected"</#if>>${power.powerName}</option>
+					    </#list>
+					    </select>
+				    留言日期：<input type="text" name="queryItem.timestart" class="dfinput" value="${(messagePage.queryItem.timestart)!!}"
+						style="margin-right: 5px"
+						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2014-12-01'})" />
+						<label>~</label> <input type="text" id="" class="dfinput" name="queryItem.timeend" value="${(messagePage.queryItem.timeend)!!}"
+						style="margin-right: 5px"
+						onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2014-12-01'})" />
+						<input type="submit" class="sure" style="margin-left: 20px"
+						value="查询" /> <input type="button" class="sure" onclick="javascript:window.location.href='addmessage.html'"
+					style="margin-left: 20px" value="添加留言" />
+				          
+				</li>
+				</ul>
+		</div>
+		<table class="tablelist" style="margin-top: 20px;">
+			<thead>
+				<tr>
+					<th>留言人</th>
+					<th>角色</th>
+					<th>标题</th>
+					<th style="min-width: 300px">内容</th>
+					<th>留言时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+    			<#list messagePage.messages as message>
+				<tr>
+					<td>${message.messagername}</td>
+					<td>${message.powername}</td>
+					<td>${message.title}</td>
+					<td>${message.content}</td>
+					<td>${message.messagetime}</td>
+					
+					<td><a href="view_message.html?messageid=${message.id}" class="tablelink">查看</a>
+					  <#if messagePage.adminid==message.messager >
+					  <a href="edit_message.html?messageid=${message.id}" class="tablelink">编辑</a>
+					  </#if>
+					  <#if messagePage.adminPower==1 >
+					  <a onclick = "del_message(${message.id},0)" href="#" class="tablelink">删除</a></td>
+					  </#if> 
+				</tr>
+				</#list>
+
+			</tbody>
+		</table>
+
+
+		<div class="pagin" style="width: 100%">
+
+			<table>
+				<tr>
+					<td  style="vertical-align: top;">
+					</td>
+					<td>
+					</td>
+					<td>
+					<div class="pagin">
+					${messagePage.pageinfo.pagecount}
+				
+					</td>
+					<td>
+						<ul class="paginList" style="margin-top: 10px">
+							${messagePage.pageinfo.page}
+						</ul>
+					</td>
+				</tr>
+			</table>
+			<div class="message"></div>
+
+		</div>
+		<input  type="hidden" id="pageno" value="${messagePage.pageno}" name="pageno"/>
+
+	</form>
+		<div class="tip">
+			<div class="tiptop">
+				<span>提示信息</span><a></a>
+			</div>
+
+			<div class="tipinfo">
+				<span><img src="../assets/images/ticon.png" /></span>
+				<div class="tipright">
+					<p>是否确认对信息的修改 ？</p>
+					<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+				</div>
+			</div>
+
+			<div class="tipbtn">
+				<input name="" type="button" class="sure" value="确定" />&nbsp; <input
+					name="" type="button" class="cancel" value="取消" />
+			</div>
+		</div>
+
+	</div>
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script type="text/javascript"
+		src="../assets/plugins/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../assets/js/page/message/message.js"></script>
+	<script type="text/javascript">
+	
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.LoginAndSysMapper">
+
+	<!-- 验证用户登录信息 -->
+	<select id="getLoginInfo" parameterType="map"
+		resultType="com.tower.common.bean.SysUserInfo">
+		select
+		a.ID as id,
+		a.Admin_id as adminid,
+		a.Admin_power as adminpower,
+		a.Admin_name as adminname,
+		a.Admin_area as adminarea,
+		a.Admin_phone as adminphone,
+		a.Admin_Area_city as admincityid,
+		CONVERT(varchar, a.admin_dl_time , 120 ) as admindltime,
+		p.Power_name as adminpowername,
+		p.Power_w as adminpowerw
+		from tower_admin a  
+		left join tower_power p on a.Admin_power=p.id
+		where 1=1
+		and a.Admin_id=#{adminid}
+		and
+		a.Admin_psd=#{password};
+
+	</select>
+	
+	<!-- 验证用户登录信息 -->
+	<select id="getSysUserInfo" parameterType="int"
+		resultType="com.tower.common.bean.SysUserInfo">
+		select
+		a.ID as id,
+		a.Admin_id as adminid,
+		a.Admin_power as adminpower,
+		a.Admin_name as adminname,
+		a.Admin_area as adminarea,
+		a.Admin_phone as adminphone,
+		CONVERT(varchar, a.admin_dl_time , 120 ) as admindltime
+		from tower_admin a
+		where 1=1
+		and a.ID=#{adminid}
+
+	</select>
+	
+	
+	<!-- 修改用户登录时间 -->
+	<update id="upateDlTime" parameterType="int">
+		update tower_admin
+		set
+		admin_dl_time=GETDATE()
+		where ID=#{id}
+		;
+	</update>
+	<!-- 判断管理员是否已经存在 -->
+	<select id="checkAdminExist" parameterType="map" resultType="int">
+		select count(1)
+		from tower_admin 
+		where 1=1
+		and ID=#{id}
+		
+	</select>
+	
+	
+	<insert id="insertAdmin" parameterType="com.tower.common.bean.SysUserInfo" >
+	  insert into tower_admin
+	  ( Admin_id,Admin_psd,Admin_power,Admin_area,Admin_name,Admin_is_bind)
+	  values
+	  (#{admin_id},#{adminpsd},#{adminpower},#{adminarea},#{adminame},#{adminisbind})
+	  ;
+	</insert>
+	<update id="updateAdmin" parameterType="com.tower.common.bean.SysUserInfo">
+	     update tower_admin 
+  		 set Admin_power=#{adminpower},
+	     Admin_city=#{ admincity},
+	     Admin_area=#{ adminarea},
+	     Admin_name=#{ adminname}， 
+	     where ID=#{id};
+	
+	</update>
+	
+	<delete id="delAdmin" parameterType="int">
+	   delete from tower_admin  
+	   where ID=#{id};
+	</delete>
+	
+	<select id="getTopNotices" parameterType="map" resultType="com.tower.common.bean.Notice">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY orderbytime desc) as rank from
+	  (
+	  select a.ID as id,
+	        (case when len( a.title )>33 then left ( a.title ,30)+'...'
+	    else  a.title 
+	    end ) as title,
+	         CONVERT(varchar, a.publishtime,23) as publishtime,
+	         b.Admin_name as publishername,
+	          a.publishtime as orderbytime
+	    from tower_notice a
+	    LEFT JOIN tower_admin b on a.publisher = b.id
+	  ) w1)as tm where tm.rank between 1 and 5
+	  ;
+	</select>
+	
+	<select id="getTopMessages" parameterType="map" resultType="com.tower.common.bean.Message">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY orderbytime desc) as rank from
+	  (
+	  select a.ID as id,
+	  (case when len('('+b.Admin_name+') '+a.title)>35 then left('('+b.Admin_name+') '+a.title,33)+'...'
+	  else '('+b.Admin_name+') '+a.title
+	  end) as title,
+			 CONVERT(varchar, a.messagetime,23) as messagetime,
+			 b.Admin_name as messagername,
+	         c.Power_name as powername  ,  
+	          a.messagetime as orderbytime  
+	    from tower_message a
+		LEFT JOIN tower_admin b on a.messager = b.id
+	    LEFT JOIN tower_power c on b.Admin_power = c.id
+	  ) w1)as tm where tm.rank between 1 and 5;
+	</select>
+	
+	<select id="getUsercount" parameterType="map" resultType="int">
+		select count(1)
+		  from tower_user_info a
+          LEFT JOIN tower_area b on a.User_area = b.ID
+		  LEFT JOIN tower_city c on b.City_id = c.City_id
+		 where 1=1
+		  <if test="admincity!=null and admincity!='' and adminpower!=1 and adminpower!=6">
+			and b.City_id=#{admincity}
+		</if>
+		<if test="adminareas!=null and adminpower!=1 and adminpower!=6">
+			and a.User_area in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+	</select>
+	
+	<select id="getTowercount" parameterType="map" resultType="int">
+		select count(1)
+		  from tower_tower_info a
+          LEFT JOIN tower_area b on a.Tower_area = b.ID
+		  LEFT JOIN tower_city c on b.City_id = c.City_id
+		 where 1=1
+		  <if test="admincity!=null and admincity!='' and adminpower!=1 and adminpower!=6">
+			   and b.City_id=#{admincity}
+		  </if>
+		  <if test="adminareas!=null and adminpower!=1 and adminpower!=6">
+			   and a.Tower_area in(
+			   <foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			   </foreach>
+			   )
+		  </if>
+	</select>
+	
+	<select id="getIngOrdercount" parameterType="map" resultType="int">
+		select count(1)
+		  from tower_order_detail a
+		  LEFT JOIN tower_tower_info b on a.Tower_id = b.ID
+          LEFT JOIN tower_area c on b.Tower_area = c.ID
+		  LEFT JOIN tower_city d on c.City_id = d.City_id
+		 where a.Tower_state in (0,2,12,13,14)
+		  <if test="admincity!=null and admincity!='' and adminpower!=1 and adminpower!=6">
+			   and c.City_id=#{admincity}
+		  </if>
+		  <if test="adminareas!=null and adminpower!=1 and adminpower!=6">
+			   and b.Tower_area in(
+			   <foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			   </foreach>
+			   )
+		  </if>
+	</select>
+	
+	<select id="getSuccOrdercount" parameterType="map" resultType="int">
+		select count(1)
+		  from tower_order_detail a
+		  LEFT JOIN tower_tower_info b on a.Tower_id = b.ID
+          LEFT JOIN tower_area c on b.Tower_area = c.ID
+		  LEFT JOIN tower_city d on c.City_id = d.City_id
+		 where a.Tower_state in (4,5,6,7,8,9,10)
+		  <if test="admincity!=null and admincity!='' and adminpower!=1 and adminpower!=6">
+			   and c.City_id=#{admincity}
+		  </if>
+		  <if test="adminareas!=null and adminpower!=1 and adminpower!=6">
+			   and b.Tower_area in(
+			   <foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			   </foreach>
+			   )
+		  </if>
+	</select>
+	
+</mapper>

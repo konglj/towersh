@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Default Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../assets/editor/themes/default/default.css" rel="stylesheet" type="text/css"/>
+		<link href="../assets/css/jquery-confirm.css" rel="stylesheet" type="text/css"/>
+		<script charset="utf-8" src="../assets/editor/kindeditor-min.js"></script>
+		<script charset="utf-8" src="../assets/editor/lang/zh_CN.js"></script>
+		<script type="text/javascript" src="../assets/js/jquery.js"></script>
+			<script type="text/javascript" src="../assets/js/jquery-confirm.js"></script>
+        <script type="text/javascript" src="../assets/plugins/jquery-validation/js/jquery.validate.js"></script>
+		<script type="text/javascript" src="../assets/js/page/notice/twnotice.js"></script>
+		<script>
+			var editor;
+			KindEditor.ready(function(K) {
+				editor = K.create('textarea[name="content"]', {
+					allowFileManager : true,
+					items: ['source', '|', 'undo', 'redo', '|', 'preview',   'cut', 'copy', 'paste', 'plainpaste', 'wordpaste',
+					        '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 
+					        'outdent', 'subscript', 'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/', 'formatblock', 'fontname',
+					         'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|',
+					         'image', 'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons',   'link', 'unlink',
+					         '|'],
+					       uploadJson : 'upload_image.html',
+				});
+				K('input[name=getHtml]').click(function(e) {
+					alert(editor.html());
+				});
+				K('input[name=isEmpty]').click(function(e) {
+					alert(editor.isEmpty());
+				});
+				K('input[name=getText]').click(function(e) {
+					alert(editor.text());
+				});
+				K('input[name=selectedHtml]').click(function(e) {
+					alert(editor.selectedHtml());
+				});
+				K('input[name=setHtml]').click(function(e) {
+					editor.html('<h3>Hello KindEditor</h3>');
+				});
+				K('input[name=setText]').click(function(e) {
+					editor.text('<h3>Hello KindEditor</h3>');
+				});
+				K('input[name=insertHtml]').click(function(e) {
+					editor.insertHtml('<strong>插入HTML</strong>');
+				});
+				K('input[name=appendHtml]').click(function(e) {
+					editor.appendHtml('<strong>添加HTML</strong>');
+				});
+				K('input[name=clear]').click(function(e) {
+					editor.html('');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form id="form_save_twnotice" style="margin-top: 50px;margin-left: 30px">
+		<input type="hidden" id="id" name="id" value="${twNotice.id}">
+		 <table align="center" cellpadding="0" cellspacing="0" class="filetable" style="border:1px none #FEDCDC; height: 240px;">
+			 <tr>
+                <td class="auto-style4">标题：</td>
+                <td class="auto-style8">
+                   <input class="dfinput" style="width: 400px;height: 25px;margin-bottom: 10px"  id="title" name="title" value="${twNotice.title}">
+                </td>
+            </tr>
+             <tr>
+                <td class="auto-style4">内容：</td>
+                <td class="auto-style8">
+			<textarea id="content" name="content" style="width:800px;height:600px;visibility:hidden;">${twNotice.content}</textarea>
+			</td>
+			</tr>
+			<tr>
+			   <td class="auto-style4"></td>
+                <td class="auto-style8">
+			</td>
+			</tr>
+			 <tr>
+                <td class="auto-style4"></td>
+                <td class="auto-style8">
+                    
+                    <input type="button" style="margin-left:90px;margin-top: 40px;margin-bottom: 40px" value="保存" onclick="savenotice()"  class="btn">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="返回" onclick="javascript:window.location.href='notice.html'"  class="btn">
+                </td>
+            </tr>
+			</table>
+		</form>
+		
+	
+		
+	</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.dfinput {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px
+}
+
+select {
+	width: 97px;
+	height: 28px;
+	margin-right: 20px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('images/bg-form-field.gif') repeat-x
+		left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+
+.select_mag {
+	margin-right: 0px
+}
+</style>
+</head>
+<body>
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a>功能菜单</a></li>
+			<li><a href="#">管理员管理</a></li>
+			<li><a href="#">绑定微信</a></li>
+		</ul>
+	</div>
+
+	<div class="rightinfo">
+		<form id="form_binduser" action="get_bind_users.html"
+			method="post">
+
+
+             <input type="hidden" id="adminid" name="adminid" value="${bindUserPage.adminid}">
+			<div class="tools" style="margin-top: 10px">
+				<li>用户手机号：<input type="text" id="usertele"
+					name="usertele" class="dfinput" value="${bindUserPage.usertele}" />
+					用户名：<input type="text" id="username"
+					name="username" class="dfinput" value="${bindUserPage.username}"  />
+					<input type="submit" class="sure" value="查询" style="margin-left: 20px" /> &nbsp; &nbsp;
+					&nbsp; &nbsp; 
+				</li>
+			</div>
+
+
+			<table class="tablelist" style="margin-top: 10px">
+				<thead>
+					<tr>
+						<th>微信号</th>
+						<th>微信昵称</th>
+						<th>手机号</th>
+						<th>用户姓名</th>
+						<th>地区</th>
+						<th>类型</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list bindUserPage.bindusers as user>
+					<tr>
+						<td>${user.wxid}</td>
+						<td>${user.wxname}</td>
+						<td>${user.usertele}</td>
+						<td>${user.username}</td>
+						<td>${user.cityname}</td>
+						<td>${user.usertype}</td>
+						<td><a onclick="binduser('${user.wxid}',${bindUserPage.adminid})" href="#" class="tablelink">绑定</a></td>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+
+			<table style="width: 100%;">
+				<tr>
+
+					<td>
+						<div class="pagin" style="width: 100%">
+
+							<table>
+								<tr>
+									<td style="vertical-align: top;"></td>
+									<td></td>
+									<td>
+										<div class="pagin">${bindUserPage.pageinfo.pagecount}
+									</td>
+									<td>
+										<ul class="paginList" style="margin-top: 10px">
+											${bindUserPage.pageinfo.page}
+											<li class="paginItem" style="padding-left: 20px"></li>
+											<li class="paginItem" >${bindUserPage.pageinfo.jumppage}</li>
+										</ul>
+									</td>
+								</tr>
+							</table>
+							<div class="message"></div>
+
+						</div> <input type="hidden" id="pageno" value="${bindUserPage.pageno}"
+						name="pageno" />
+						</form>
+					</td>
+				</tr>
+			</table>
+	</div>
+
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script language="javascript" type="text/javascript"
+		src="../assets/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../assets/js/page/manager/binduser.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+        });
+</script>
+	<style type="text/css">
+/*拍拍网风格*/
+.paginator {
+	font: 11px Arial, Helvetica, sans-serif;
+	padding: 10px 20px 10px 0;
+	margin: 0px;
+}
+
+.paginator a {
+	padding: 1px 6px;
+	border: solid 1px #ddd;
+	background: #fff;
+	text-decoration: none;
+	margin-right: 2px
+}
+
+.paginator a:visited {
+	padding: 1px 6px;
+	border: solid 1px #ddd;
+	background: #fff;
+	text-decoration: none;
+}
+
+.paginator .cpb {
+	padding: 1px 6px;
+	font-weight: bold;
+	font-size: 13px;
+	border: none
+}
+
+.paginator a:hover {
+	color: #fff;
+	background: #ffa501;
+	border-color: #ffa501;
+	text-decoration: none;
+}
+
+/*淘宝风格*/
+.paginator {
+	font: 12px Arial, Helvetica, sans-serif;
+	padding: 10px 20px 10px 0;
+	margin: 0px;
+}
+
+.paginator a {
+	border: solid 1px #ccc;
+	color: #0063dc;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.paginator a:visited {
+	padding: 1px 6px;
+	border: solid 1px #ddd;
+	background: #fff;
+	text-decoration: none;
+}
+
+.paginator .cpb {
+	border: 1px solid #F50;
+	font-weight: 700;
+	color: #F50;
+	background-color: #ffeee5;
+}
+
+.paginator a:hover {
+	border: solid 1px #F50;
+	color: #f60;
+	text-decoration: none;
+}
+
+.paginator a,.paginator a:visited,.paginator .cpb,.paginator a:hover {
+	float: left;
+	height: 16px;
+	line-height: 16px;
+	min-width: 10px;
+	_width: 10px;
+	margin-right: 5px;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 12px;
+	font-family: Arial, SimSun;
+	padding: 0 3px;
+}
+</style>
+
+	<style type="text/css">
+select {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+select {
+	background: rgb(255, 255, 255);
+	border-color: rgb(110, 159, 222) rgb(196, 222, 255) rgb(196, 222, 255)
+		rgb(110, 159, 222);
+	padding: 5px;
+}
+
+select {
+	border: 1px solid rgb(230, 219, 85);
+}
+
+select {
+	background: rgb(255, 255, 255) url('../assets/images/bg-form-field.gif')
+		repeat-x left top;
+	padding: 5px;
+	border: 1px solid rgb(202, 216, 229);
+	color: rgb(51, 51, 51);
+	font-size: 13px;
+}
+</style>
+
+</body>
+</html>

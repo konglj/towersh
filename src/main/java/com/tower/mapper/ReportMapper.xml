@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.ReportMapper">
+	<!-- 获取订单报表列表 -->
+	<select id="getReportOrders" parameterType="com.tower.common.bean.ReportOrderPage"
+		resultType="com.tower.common.bean.ReportOrder">
+
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY toweraddtime desc)
+		as rank from(
+		select
+		o.Order_id as orderid,
+		u.User_name as username,
+		u.User_tele as usertele,
+		a.area_name as towerareaname,
+		c.City_name as
+		towercityname,
+		(case when len(t.Tower_name)>10 then left (t.Tower_name,10)+'...'
+		else t.Tower_name
+		end )
+		as towername,
+		t.Tower_idefined as toweridefined,
+		o.Tower_state as
+		towerstate,
+		o.Tower_fee as
+		towerfee,
+		CONVERT(varchar,
+		o.Tower_add_time,
+		120 ) as
+		toweraddtime,
+		s.statename as towerstatename,
+		s.iseffect as
+		orderiseffect,
+		u.User_win_type as userwintype,
+		u.User_win_time as userwintime
+		from
+		tower_order_detail
+		o
+		left join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join
+		tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on
+		a.ID=t.Tower_area
+		left join tower_city c on
+		c.City_id=a.City_id
+		left
+		join tower_city uc on
+		uc.ID=u.User_area
+		left join tower_order_state s on s.state=o.Tower_state
+		where 1=1
+		and
+		t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate!=-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+		<if test="parameter.iseffect!=null and parameter.iseffect!=-1">
+			and s.iseffect=#{parameter.iseffect}
+		</if>
+		)w1)as tmp where tmp.rank between #{pageno}*10-9 and #{pageno}*10
+
+	</select>
+
+	<select id="getOrdersCount" parameterType="com.tower.common.bean.ReportOrderPage"
+		resultType="int">
+
+		select
+		count(1)
+		from
+		tower_order_detail
+		o
+		left join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join
+		tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on
+		a.ID=t.Tower_area
+		left join tower_city c on
+		c.City_id=a.City_id
+		left
+		join tower_city uc on
+		uc.ID=u.User_area
+		left join tower_order_state s on s.state=o.Tower_state
+		where 1=1
+		and
+		t.Tower_is_hb=0
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate!=-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+		<if test="parameter.iseffect!=null and parameter.iseffect!=-1">
+			and s.iseffect=#{parameter.iseffect}
+		</if>
+	</select>
+	<!-- 订单报表导出 -->
+	<select id="getDCReportOrders" parameterType="com.tower.common.bean.ReportOrderPage"
+		resultType="map">
+		select
+		o.Order_id as orderid,
+		u.User_name as username,
+		u.User_tele as
+		usertele,
+		case
+		u.User_level
+		when 1 then '一级用户'
+		when 2 then '二级用户'
+		when 3
+		then '三级用户'
+		when 4 then '四级用户'
+		end as userlevelname,
+		uc.City_name as
+		usercityname,
+		u.User_company as
+		usercompany,
+		t.Tower_name as towername,
+		a.area_name as towerareaname,
+		c.City_name as
+		towercityname,
+		t.Tower_idefined as toweridefined,
+		t.Tower_who_lt as towerwholt,
+		t.Tower_who_yd as towerwhoyd,
+		t.Tower_who_dx as towerwhodx,
+		t.Tower_address as toweraddress,
+		case
+		t.Tower_level
+		when 1
+		then '一级站址'
+		when 2 then '二级站址'
+		when 3 then '三级站址'
+		when 4 then '四级站址'
+		end
+		as towerlevelname,
+		p.Tower_type_name as
+		towertypename,
+		ss.storename as towerstorename,
+		t.Tower_large as
+		towerlarge,
+		t.Tower_j as towerj,
+		t.Tower_w as towerw,
+		t.Tower_manager_name as towermanagername,
+		t.Tower_manager as
+		towermanager,
+		t.Tower_info as towerinfo,
+		s.statename as towerstatename,
+		o.Tower_fee as towerfee,
+		t.Tower_rent_fee as towerrentfee,
+		o.Tower_fact_fee as towerfactfee,
+		o.Tower_fact_rent_fee as
+		towerfactrentfee,
+		o.Tower_target_address as towertargetaddress,
+		o.Tower_fact_address as towerfactaddress,
+		case o.Tower_power_type
+		when 1
+		then '直供电'
+		when 2 then '转供电'
+		end as towerpowertype,
+		o.Tower_power_price
+		as towerpowerprice,
+		o.Tower_power_t as towerpowert,
+		o.Tower_yz_name as
+		toweryzname,
+		o.Tower_yz_phone as toweryzphone,
+		CONVERT(varchar,
+		o.Tower_add_time, 120 ) as toweraddtime,
+		case s.iseffect
+		when 0 then '失效'
+		when 1 then '有效'
+		end orderiseffectname,
+		u.User_win_type as userwintype,
+		u.User_win_time as userwintime,
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=15 order by i.Order_time desc) as towerfactaddresstime,
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=19 order by i.Order_time desc) as towerfactaddressshtime,
+		case 
+		when 
+		    o.Tower_state=2 or o.Tower_state=3 or o.Tower_state=4
+		   or o.Tower_state=5 or o.Tower_state=6 or o.Tower_state=7
+		   or o.Tower_state=22 or o.Tower_state=8 or o.Tower_state=9
+		   or o.Tower_state=10
+		 then  o.Tower_end_date
+		 end towerposttime,
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=5 order by i.Order_time desc) as towerrenttime,
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=7 order by i.Order_time desc) as towerthreetime,
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=8 order by i.Order_time desc) as towerfktime,
+		o.Tower_complete_time as towercompletetime,
+			case o.Tower_yq_count
+		when 1 then
+		 (select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=13 order by i.Order_time desc) 
+		
+		when 2 then
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=13 order by i.Order_time asc) 
+		end as towerfirstyq,
+		
+		case o.Tower_yq_count
+	
+		when 2 then
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=13 order by i.Order_time desc) 
+		end as towersecondyq,
+		
+		case o.Tower_yq_count
+		when 1 then
+		 (select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=12 order by i.Order_time desc) 
+		
+		when 2 then
+		(select top(1) CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=12 order by i.Order_time asc) 
+		end as towerfirstyqsh,
+		
+		case o.Tower_yq_count
+		when 2 then
+		(select tmp.Order_time from (select *,ROW_NUMBER() OVER (ORDER BY Order_time asc)
+		as rank from(
+		select  CONVERT(varchar,i.Order_time, 120 ) as Order_time from tower_sh_doinfo i where i.Order_id=o.ID and i.Order_state=12 
+		)w1)as tmp where tmp.rank between 2 and 2)
+		end towersecondyqsh
+		
+		 
+		from
+		tower_order_detail
+		o
+		left
+		join tower_user_info u on
+		u.Wx_id=o.Tower_wx_id
+		left join
+		tower_tower_info t on t.ID=o.Tower_id
+		left join tower_area a on
+		a.ID=t.Tower_area
+		left join tower_city c on c.City_id=a.City_id
+		left
+		join tower_city uc on uc.ID=u.User_area
+		left join tower_order_state s
+		on s.state=o.Tower_state
+		left join tower_tower_type as p on
+		p.ID=t.Tower_type
+		left join tower_tower_store ss on ss.storeid=t.Tower_store
+		where 1=1
+		and t.Tower_is_hb=0
+		
+		
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="adminareas!=null">
+			and a.ID in(
+			<foreach collection="adminareas" item="area" separator=",">
+				#{area.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.towername!=null and parameter.towername!='' ">
+			and t.Tower_name like '%${parameter.towername}%'
+		</if>
+		<if test="parameter.towerarea !=null and parameter.towerarea!=0 ">
+			and t.Tower_area=#{parameter.towerarea}
+		</if>
+		<if test="parameter.towercity !=null and parameter.towercity!=0 ">
+			and c.ID=#{parameter.towercity}
+		</if>
+		<if test="parameter.towerstate!=null and parameter.towerstate!=-1 ">
+			and o.Tower_state=#{parameter.towerstate}
+		</if>
+
+		<if
+			test="parameter.toweraddtimestart!=null and parameter.toweraddtimestart!=''">
+			and o.Tower_add_time >=#{parameter.toweraddtimestart}
+		</if>
+		<if
+			test="parameter.toweraddtimeend!=null and parameter.toweraddtimeend!=''">
+			and o.Tower_add_time <![CDATA[ <= ]]>
+			#{parameter.toweraddtimeend}
+		</if>
+	</select>
+
+	<!-- ++++++++++++++++++++++++++++++++++收款报表++++++++++++++++++++++++++++++++++++++++++ -->
+
+	<select id="getReportTxs" parameterType="com.tower.common.bean.ReportTxPage"
+		resultType="com.tower.common.bean.ReportTx">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY adddate desc) as
+		rank
+		from(
+		select
+		r.Tx_id as txid,
+		u.User_name as username,
+		r.Bank_back_id
+		as
+		bankbackid,
+		t.Tower_name as towername,
+		c.City_name as towercityname,
+		a.area_name as towerareaname,
+		s.Fee as fee,
+		CONVERT(varchar,
+		r.Add_date,
+		120 ) as adddate,
+		uc.City_name as usercityname
+		from tower_user_tx_source
+		s
+		left join
+		tower_user_tx_record r on r.ID=s.Tx_id
+		left join
+		tower_order_detail o
+		on o.ID=s.Order_id
+		left join tower_tower_info t on
+		t.ID=o.Tower_id
+		left
+		join tower_user_info u on u.Wx_id=s.Wx_id
+		left join
+		tower_area a on
+		a.ID=t.Tower_area
+		left join tower_city c on
+		c.City_id=a.City_id
+		left join tower_city uc on
+		uc.ID=u.User_area
+		where 1
+		= 1
+		and r.ishidden!=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and uc.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		and (r.state=5 or r.state=6)
+		) w1)as t where t.rank between
+		#{pageno}*10-9 and #{pageno}*10;
+	</select>
+
+
+	<select id="getReportTxsCount" parameterType="com.tower.common.bean.ReportTxPage"
+		resultType="int">
+		select
+		count(1)
+		from tower_user_tx_source s
+		left join
+		tower_user_tx_record r on r.ID=s.Tx_id
+		left join tower_order_detail o
+		on o.ID=s.Order_id
+		left join tower_tower_info t on t.ID=o.Tower_id
+		left
+		join tower_user_info u on u.Wx_id=s.Wx_id
+		left join tower_area a on
+		a.ID=t.Tower_area
+		left join tower_city c on c.City_id=a.City_id
+		left
+		join tower_city uc on
+		uc.ID=u.User_area
+		where 1 = 1
+		and r.ishidden!=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and uc.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		and (r.state=5 or r.state=6)
+
+	</select>
+	<select id="getDCReportTxs" parameterType="com.tower.common.bean.ReportTxPage"
+		resultType="map">
+		select
+		r.Tx_id as txid,
+		u.User_name as username,
+		r.Bank_name as bankname,
+		r.Bank_open as bankopen,
+		r.Bank_cardid as bankcardid,
+		r.Bank_back_id as
+		bankbackid,
+		o.Order_id as orderid,
+		t.Tower_id as towerid,
+		t.Tower_name as
+		towername,
+		c.City_name as towercityname,
+		a.area_name as towerareaname,
+		case s.Fee_type
+		when 0 then '预付款'
+		when 1 then '尾款'
+		end as feetype,
+		s.Fee
+		as fee,
+		CONVERT(varchar,
+		r.Add_date, 120 ) as adddate,
+		r.state as state,
+		(case r.state when 0 then '提现申请中' when 1 then '审核通过，待打款' when 2 then '审核驳回'
+		when 3 then '已打款' when 4 then '打款失败' when 5 then '用户已确认' when 6 then
+		'用户已确认(自动)' end ) as statename
+		from
+		tower_user_tx_source s
+		left join
+		tower_user_tx_record r on r.ID=s.Tx_id
+		left join tower_order_detail o
+		on o.ID=s.Order_id
+		left join
+		tower_tower_info t on t.ID=o.Tower_id
+		left
+		join tower_user_info u on
+		u.Wx_id=s.Wx_id
+		left join tower_area a on a.ID=t.Tower_area
+		left join
+		tower_city c on c.City_id=a.City_id
+		left join tower_city uc on
+		uc.ID=u.User_area
+		<!-- 
+		left join tower_user_bank b on b.id=Card_id
+		 -->
+		where 1 =
+		1
+		and r.ishidden!=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and uc.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name like '%${parameter.username}%'
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		and (r.state=5 or r.state=6)
+
+	</select>
+
+	<!-- ++++++++++++++++++++++++++++++++++用户报表++++++++++++++++++++++++++++++++++++++++++ -->
+
+	<select id="getReportUsers" parameterType="com.tower.common.bean.ReportUserPage"
+		resultType="com.tower.common.bean.ReportUser">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY useraddtime desc)
+		as rank from(
+		select
+		u.Wx_name as wxname,
+		u.User_name as username,
+		u.User_tele as usertele,
+		c.City_name as usercityname,
+		(case u.user_level
+		when 1 then '一级用户' when 2
+		then '二级用户' when 3 then '三级用户'
+		when 4 then
+		'四级用户' end ) as userlevel,
+		d.Type_name as usertype,
+		m.Get_now as getnow,
+		m.Getting_now as
+		gettingnow,
+		o.Order_count as ordercount,
+		CONVERT(varchar,
+		u.Add_time, 120
+		) as useraddtime
+		from tower_user_info u
+		LEFT JOIN tower_city c on u.User_area= c.ID
+		LEFT
+		JOIN tower_user_type d
+		on u.User_type = d.ID
+		LEFT JOIN
+		tower_user_charge m on m.Wx_id=u.Wx_id
+		LEFT JOIN tower_user_order_info
+		o on o.Wx_id=u.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name=#{parameter.username}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.userstate!=null and parameter.userstate!=-1 ">
+			and u.User_state=#{parameter.userstate}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		<if
+			test="parameter.useraddtimestart!=null and parameter.useraddtimestart!=''">
+			and u.Add_time >=#{parameter.useraddtimestart}
+		</if>
+		<if test="parameter.useraddtimeend!=null and parameter.useraddtimeend!=''">
+			and u.Add_time <![CDATA[ <= ]]>
+			#{parameter.useraddtimeend}
+		</if>
+		) w1)as t where t.rank between #{pageno}*10-9 and #{pageno}*10;
+	</select>
+
+	<select id="getReportUsersCount" parameterType="com.tower.common.bean.ReportUserPage"
+		resultType="int">
+		select count(1)
+		from tower_user_info u
+		LEFT JOIN tower_city c on
+		u.User_area= c.ID
+		LEFT
+		JOIN tower_user_type d on u.User_type = d.ID
+		LEFT
+		JOIN
+		tower_user_charge m on m.Wx_id=u.Wx_id
+		LEFT JOIN
+		tower_user_order_info
+		o on o.Wx_id=u.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name=#{parameter.username}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.userstate!=null and parameter.userstate!=-1 ">
+			and u.User_state=#{parameter.userstate}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		<if
+			test="parameter.useraddtimestart!=null and parameter.useraddtimestart!=''">
+			and u.Add_time >=#{parameter.useraddtimestart}
+		</if>
+		<if test="parameter.useraddtimeend!=null and parameter.useraddtimeend!=''">
+			and u.Add_time <![CDATA[ <= ]]>
+			#{parameter.useraddtimeend}
+		</if>
+		;
+	</select>
+
+
+	<select id="getDCReportUsers" parameterType="com.tower.common.bean.ReportUserPage"
+		resultType="map">
+		select
+		u.Wx_name as wxname,
+		u.User_name as username,
+		case u.User_sex
+		when
+		1 then '男'
+		when 2 then '女'
+		end as usersex,
+		u.User_tele as usertele,
+		c.City_name as usercityname,
+		u.User_company as usercompany,
+		(case
+		u.user_level when 1 then '一级用户' when 2
+		then '二级用户' when 3 then '三级用户'
+		when 4 then '四级用户' end ) as userlevel,
+		d.Type_name as usertype,
+		(select
+		count(1) from user_favourite_tower f where f.Wx_id =u.Wx_id) as
+		favouritecount,
+		o.Order_count as ordercount,
+		o.Succ_count as succcount,
+		o.Fail_count as failcount,
+		o.Cancel_count as cancelcount,
+		o.Ing_count as
+		ingcount,
+		m.Charge as charge,
+		m.Get_now as getnow,
+		m.Getting_now as
+		gettingnow,
+		CONVERT(varchar,
+		u.Add_time, 120
+		) as useraddtime,
+		u.User_win_type as userwintype,
+		u.User_win_time as userwintime
+		from
+		tower_user_info u
+		LEFT JOIN tower_city c on u.User_area= c.ID
+		LEFT
+		JOIN
+		tower_user_type d on u.User_type = d.ID
+		LEFT JOIN tower_user_charge m
+		on m.Wx_id=u.Wx_id
+		LEFT JOIN tower_user_order_info o on o.Wx_id=u.Wx_id
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<if test="parameter.usertele!=null and parameter.usertele!='' ">
+			and u.User_tele=#{parameter.usertele}
+		</if>
+		<if test="parameter.username!=null and parameter.username!='' ">
+			and u.User_name=#{parameter.username}
+		</if>
+		<if test="parameter.usercity!=null and parameter.usercity!=0 ">
+			and u.User_area=#{parameter.usercity}
+		</if>
+		<if test="parameter.userlevel!=null and parameter.userlevel!=-1 ">
+			and u.user_level=#{parameter.userlevel}
+		</if>
+		<if test="parameter.userstate!=null and parameter.userstate!=-1 ">
+			and u.User_state=#{parameter.userstate}
+		</if>
+		<if test="parameter.usertype!=null and parameter.usertype!=-1 ">
+			and u.User_type=#{parameter.usertype}
+		</if>
+		<if
+			test="parameter.useraddtimestart!=null and parameter.useraddtimestart!=''">
+			and u.Add_time >=#{parameter.useraddtimestart}
+		</if>
+		<if test="parameter.useraddtimeend!=null and parameter.useraddtimeend!=''">
+			and u.Add_time <![CDATA[ <= ]]>
+			#{parameter.useraddtimeend}
+		</if>
+		order by u.Add_time desc
+		;
+	</select>
+
+
+
+</mapper>

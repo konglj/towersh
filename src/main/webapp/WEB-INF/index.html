@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+<style>
+.clear{ clear:both} 
+</style>
+
+</head>
+
+
+<body>
+
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="index.html">首页</a></li>
+		</ul>
+	</div>
+
+
+	<div class="mainbox">
+
+		<div class="mainleft">
+
+
+			<div class="leftinfo">
+				<div class="listtitle">
+					<a href="#" class="more1"></a>登录信息
+				</div>
+
+				<div class="mainindex">
+					<div class="welinfo">
+						<span><img src="assets/images/sun.png" alt="天气" /></span> <b>
+							<label id="myuser">${indexpage.user.adminname}</label> 您好，欢迎使用铁塔选址吧管理平台
+						</b> <a href="personalSettings/info.html" target="rightFrame">帐号设置</a>
+					</div>
+
+					<div class="welinfo">
+						<span><img src="assets/images/time.png" alt="时间" /></span> <i>
+							<label id="dltime">您上次登录时间：${indexpage.user.admindltime}</label>
+						</i> （不是您登录的？<a href="service.html" target="rightFrame">请联系技术人员!</a>）
+					</div>
+				</div>
+
+			</div>
+			</div>
+			<!--leftinfo end-->
+
+<div class="mainleft" style="padding-right: 250px">
+			<div class="leftinfos" >
+
+
+				<div class="infoleft" style="width: 600px">
+
+					<div class="listtitle">
+						<a href="message/message.html" class="more1">更多</a>留言版
+					</div>
+					<ul class="newlist">
+					<!-- <li><a href="#">（打款人员：张浩）快过年的节奏！！！</a><b>2016-02-02</b></li>
+					<li><a href="#">（区域管理员：王红岩）最近还准备搞活动吗？</a><b>2016-01-10</b></li>
+					<li><a href="#">（地市管理员：李天一）祝后台各位工作人员新年快乐。</a><b>2015-12-31</b></li>
+					<li><a href="#">（区域管理员：王明）有些疑难站址需要更有力的活动啊！ </a><b>2016-12-12</b></li>
+					<li><a href="#">（区域管理员：李爱国）济南历下区站址已全部上传</a><b>2016-11-27</b></li> -->
+					<#list indexpage.messages as message>
+					<li><a href="#">${message.title}</a><b>${message.messagetime}</b></li>
+					</#list>
+					</ul>
+				</div>
+
+
+				<div class="inforight">
+					<div class="listtitle">
+						<a href="#" class="more1"></a>常用工具
+					</div>
+
+					<ul class="iconlist">
+
+						<li>
+						
+							<p>
+								<a href="tower/tower_add.html" target="rightFrame"><img src="assets/images/ico01.png" />
+								<p>站址导入</p>
+								</a>
+							</p>
+						</li>
+						<li><a href="order/order.html" target="rightFrame"> <img
+								src="assets/images/ico05.png" />
+								<p>订单管理</p>
+						</a></li>
+
+						<li>
+							<p>
+								<a href="order/fee_sh.html" target="rightFrame">
+								<img src="assets/images/ico02.png" />
+								<p>付款审核</p>
+								</a>
+							</p></li>
+						<li>
+							<p>
+								<a href="money/txmanage.html" target="rightFrame">
+								<img src="assets/images/ico04.png" />
+								<p>提现管理</p>
+								</a>
+							</p></li>
+						<li>
+							<p>
+								<a href="report.html" target="rightFrame">
+								<img src="assets/images/ico03.png" />
+								<p>报表管理</p>
+								</a>
+							</p></li>
+
+
+					</ul>
+
+				</div>
+
+
+			</div>
+
+
+		</div>
+		<!--mainleft end-->
+
+
+		<div class="mainright">
+
+
+			<div class="dflist">
+				<div class="listtitle">
+					<a href="notice/notice.html" class="more1">更多</a>公告消息
+				</div>
+				<ul class="newlist">
+					<!-- <li><a href="#">山东铁塔公司祝各位元旦快乐，新的一年里，事业蒸蒸日上</a><b>2016-01-01</b></li>
+					<li><a href="#">明日新发布的圣诞站址，请各地市管理员做好准备。</a><b>2015-12-31</b></li>
+					<li><a href="#">新站址已全部发布完毕。各地市管理员，做好统计，尤其是疑难站址</a><b>2015-12-18</b></li>
+					<li><a href="#">各地市管理员请做好辅助会员谈址工作</a><b>2015-12-01</b></li> -->
+					<#list indexpage.notices as notice>
+					<li><a href="#">${notice.title}</a><b>${notice.publishtime}</b></li>
+					</#list>
+					</ul>
+				<!-- 
+				<ul class="newlist">
+					<li><a href="#">上海自贸区今日正式挂牌成立</a></li>
+					<li><a href="#">习近平将访东南亚两国 首次出席APEC峰会</a></li>
+					<li><a href="#">最高法:谎称炸弹致航班备降者从重追刑责</a></li>
+					<li><a href="#">华北大部遭遇雾霾天 北京全城陷重污染</a></li>
+					<li><a href="#">"环保专家"董良杰涉嫌寻衅滋事被刑拘</a></li>
+					<li><a href="#">中央巡视组：重庆对一把手监督不到位</a></li>
+					<li><a href="#">囧!悍马没改好成华丽马车(图)</a></li>
+					<li><a href="#">澳门黄金周加派稽查人员监察出租车违规行为</a></li>
+					<li><a href="#">香港环境局长吁民众支持政府扩建堆填区</a></li>
+				</ul>
+				 -->
+			</div>
+<div class="clear"></div> 
+
+			<div class="dflist1">
+				<div class="listtitle">
+					<a href="#" class="more1"></a>信息统计
+				</div>
+				<ul class="newlist">
+					<li><i>用户数：</i>${indexpage.usercount}</li>
+					<li><i>站址数：</i>${indexpage.towercount}</li>
+					<li><i>进行中订单数：</i>${indexpage.ingordercount}</li>
+					<li><i>成功订单数：</i>${indexpage.succordercount}</li>
+				</ul>
+			</div>
+
+
+
+
+
+		</div>
+		<!--mainright end-->
+
+
+	</div>
+	<script type="text/javascript" src="assets/js/jquery.js"></script>
+	<script type="text/javascript" src="assets/js/jsapi.js"></script>
+	<script type="text/javascript"
+		src="assets/js/format+zh_CN,default,corechart.I.js"></script>
+	<script type="text/javascript"
+		src="assets/js/jquery.gvChart-1.0.1.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.ba-resize.min.js"></script>
+	<script type="text/javascript">
+	setWidth();
+	$(window).resize(function(){
+		setWidth();	
+	});
+	function setWidth(){
+		var width = ($('.leftinfos').width()-12)/2;
+		$('.infoleft,.inforight').width(width);
+	}
+</script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.TwnoticeMapper">
+	<select id="getTwNotices" parameterType="com.tower.common.bean.TwNoticePage"
+		resultType="com.tower.common.bean.TwNotice">
+		select * from (select *,ROW_NUMBER() OVER (ORDER BY addtime desc) as
+		rank from(
+		select
+		n.id as id,
+		n.title as title,
+		n.content as content,
+		n.adduser as
+		adduser,
+		CONVERT(varchar,
+		n.addtime,
+		120 ) as
+		addtime,
+		u.Admin_name as addusername
+		from tower_tw_notice n
+		left
+		join
+		tower_admin u
+		on n.adduser=u.ID
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.title!=null and parameter.title!=''">
+			and n.title like '%${parameter.title}%'
+		</if>
+		<if test="parameter.content!=null and parameter.content!=''">
+			and n.content like '%${parameter.content}%'
+		</if>
+		<if test="parameter.addtimestart!=null and parameter.addtimestart!=''">
+			and n.addtime >=#{parameter.addtimestart}
+		</if>
+		<if test="parameter.addtimeend!=null and parameter.addtimeend!=''">
+			and n.addtime <![CDATA[ <= ]]>
+			#{parameter.addtimeend}
+		</if>
+		)w1)as tmp where tmp.rank between #{pageno}*10-9 and #{pageno}*10
+	</select>
+
+
+	<select id="getTwNoticesCount" parameterType="com.tower.common.bean.TwNoticePage"
+		resultType="int">
+		select
+		count(1)
+
+		from tower_tw_notice n
+		left join
+		tower_admin u on
+		n.adduser=u.ID
+		where 1=1
+		<!-- admin -->
+		<if test="adminCitys!=null">
+			and c.ID in(
+			<foreach collection="adminCitys" item="city" separator=",">
+				#{city.id}
+			</foreach>
+			)
+		</if>
+		<!-- admin end -->
+		<if test="parameter.title!=null and parameter.title!=''">
+			and n.title like '%${parameter.title}%'
+		</if>
+		<if test="parameter.content!=null and parameter.content!=''">
+			and n.content like '%${parameter.content}%'
+		</if>
+		<if test="parameter.addtimestart!=null and parameter.addtimestart!=''">
+			and n.addtime >=#{parameter.addtimestart}
+		</if>
+		<if test="parameter.addtimeend!=null and parameter.addtimeend!=''">
+			and n.addtime <![CDATA[ <= ]]>
+			#{parameter.addtimeend}
+		</if>
+	</select>
+
+	<select id="getTwNotice" parameterType="int"
+		resultType="com.tower.common.bean.TwNotice">
+		select
+		n.id as id,
+		n.title as title,
+		n.content as content,
+		n.adduser as
+		adduser,
+		CONVERT(varchar,
+		n.addtime,
+		120 ) as
+		addtime,
+		u.Admin_name as addusername
+		from tower_tw_notice n
+		left
+		join
+		tower_admin u
+		on n.adduser=u.ID
+		where 1=1
+		and n.id=#{id}
+	</select>
+	<select id="getTwNoticeInfo" parameterType="int"
+		resultType="com.tower.common.bean.TwNotice">
+		select
+		n.id as id,
+		n.title as title,
+		n.content as content,
+		n.adduser as
+		adduser,
+		CONVERT(varchar,
+		n.addtime,
+		120 ) as
+		addtime,
+		u.Admin_name as addusername,
+		(select count(1) from
+		tower_tw_notice_send
+		t where t.noticeid=#{id} ) as sendcount
+		from
+		tower_tw_notice n
+		left
+		join
+		tower_admin u on n.adduser=u.ID
+		where 1=1
+		and
+		n.id=#{id}
+	</select>
+
+	<insert id="insertTwNotice" parameterType="com.tower.common.bean.TwNotice">
+		insert into
+		tower_tw_notice
+		(title,content,adduser,addtime)
+		values
+		(#{title},#{content},#{adduser},GETDATE())
+		;
+	</insert>
+	<update id="updateTwNotice" parameterType="com.tower.common.bean.TwNotice">
+		update tower_tw_notice
+		set title=#{title},
+		content=#{content}
+		where 1=1
+		and id=#{id}
+		;
+	</update>
+
+	<delete id="delTwNotice" parameterType="int">
+		delete from
+		tower_tw_notice
+		where 1=1
+		and id=#{id}
+		;
+	</delete>
+	<select id="getNoticeSends" parameterType="int"
+		resultType="com.tower.common.bean.TwNoticeSend">
+		select
+		s.id as id,
+		s.noticeid as noticeid,
+		s.senduser as
+		senduser,
+		a.Admin_name as sendusername,
+		case s.userlevel
+		when 0 then '全部'
+		when 1 then '一級用戶'
+		when 2 then '二級用戶'
+		when 3 then '三級用戶'
+		when 4 then
+		'四級用戶'
+		end userlevelname,
+		(case s.usertype
+		when 0 then '全部'
+		when 1 then (select p.Type_name from tower_user_type where
+		p.ID=s.usertype)
+		end )
+		as usertypename,
+		s.senduserscount as senduserscount,
+		s.sendareas as
+		sendareas,
+		CONVERT(varchar,
+		s.sendtime ,
+		120 ) as
+		sendtime
+		from
+		tower_tw_notice_send s
+		left join tower_admin a on a.ID=s.senduser
+		left
+		join tower_user_type p on p.ID=s.usertype
+		where 1=1
+		and
+		s.noticeid=#{noticeid}
+		order by s.sendtime desc
+	</select>
+	<insert id="insertNoticeSend" parameterType="com.tower.common.bean.TwNoticeSend">
+		insert into
+		tower_tw_notice_send
+		(noticeid,senduser,sendareas,userlevel,usertype,senduserscount,sendtime)
+		values
+		(#{noticeid},#{senduser},#{sendareas},#{userlevel},#{usertype},#{senduserscount},GETDATE())
+		;
+	</insert>
+
+</mapper>

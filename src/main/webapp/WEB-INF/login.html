@@ -1,0 +1,65 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>上海铁塔寻址俱乐部</title>
+<link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+<link href="assets/css/jquery-confirm.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+</style>
+</head>
+
+<body
+	style="background-image: url(assets/images/loginBg.png); background-repeat:repeat-x ;  overflow: hidden;">
+
+	<form id="form_login">
+		
+		<div class="loginbody">
+
+			<span class="systemlogo"></span>
+
+			<div class="loginbox">
+
+				<ul>
+				    <li><img alt="" src="assets/images/userlogin.jpg" style="width: 80%;"></li>
+					<li><font style="font-size: 10pt;font-family:微软雅黑 ;color: #947C7A" >账号：</font><input type="text" id="userid" name="userid" class="loginuser" maxlength="20" /></li>
+					<li><font style="font-size: 10pt;font-family:微软雅黑 ;color:#947C7A">密码：</font><input type="password" id="userpsd" name="userpsd" class="loginpwd" maxlength="20" /></li>
+					<li style="text-align: center;">
+						<input type="button" id="btn_login" value="登录" class="loginbtn"
+						onclick="login()"> &nbsp;&nbsp;
+						<input type="reset" id="btn_login" value="重置" class="loginrest">
+						
+
+					</li>
+				</ul>
+
+
+			</div>
+
+		</div>
+
+	</form>
+
+<script type="text/javascript" src="assets/js/jquery-2.1.1.min.js"></script>
+
+<script type="text/javascript" src="assets/plugins/jquery-validation/js/jquery.validate.js"></script>
+<script type="text/javascript" src="assets/js/jquery-confirm.js"></script>
+<script type="text/javascript" src="assets/js/page/login/login.js"></script>
+<script language="javascript">
+	$(function() {
+		
+		$('.loginbox').css({
+			'position' : 'absolute',
+			'left' : ($(window).width() - 692) /2
+		});
+		$(window).resize(function() {
+			$('.loginbox').css({
+				'position' : 'absolute',
+				'left' : ($(window).width() - 692) / 2
+			});
+		});
+	});
+</script>
+</body>
+</html>

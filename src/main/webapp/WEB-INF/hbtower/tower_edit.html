@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加站址</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/select1.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+.auto-style1 {
+	width: 89px;
+}
+
+.auto-style2 {
+	width: 104px;
+	height: 69px;
+}
+
+.auto-style4 {
+	width: 125px;
+	text-align: right;
+	height: 40px;
+}
+
+.auto-style5 {
+	text-align: right;
+	width: 67px;
+}
+
+.SELECT {
+	border: 1px solid #629ACD;
+	FONT-SIZE: 9pt;
+	FONT-FAMILY: "Arial", "Helvetica", "sans-serif";
+	background-color: #EBF5FD;
+	vertical-align: text-button;
+}
+
+.auto-style6 {
+	width: 102px;
+	height: 69px;
+}
+
+.auto-style8 {
+	width: 102px;
+	text-align: left;
+}
+
+.auto-style9 {
+	width: 67px;
+	height: 69px;
+}
+
+.auto-style10 {
+	width: 102px;
+}
+
+.auto-style11 {
+	width: 125px;
+	height: 69px;
+}
+
+.cityleft select{
+	float:left;
+	margin-right:8px;
+}
+
+.auto-style16 textarea{
+	width:345px;
+	height:82px;
+	border-top:solid 1px #c3ab7d; 
+	border-left:solid 1px #c3ab7d; 
+	border-right:solid 1px #e7d5ba; 
+	border-bottom:solid 1px #e7d5ba;
+}
+
+</style>
+
+</head>
+<body>
+
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li><a href="#">功能菜单</a></li>
+			<li><a href="#">站址管理</a></li>
+			<li><a href="#">站址编辑</a></li>
+		</ul>
+	</div>
+
+
+	<div class="formbody">
+
+
+		<div id="usual1" class="usual">
+
+
+            <form id="form_tab1">
+			<div id="tab1" class="tabson">
+				<ul class="forminfo">
+					<table class="filetable"
+						style="border: 1px none #FEDCDC; height: 417px;">
+						<tr>
+							<td class="auto-style4">站址名称：</td>
+							<td class="auto-style8"><input id="towername" name="towername" value="${addPage.tower.towername}"
+								class="dfinput"></td>
+							<td class="auto-style5">地区：</td>
+							<td class="auto-style21">
+								<div class="usercity">
+									<div class="cityleft">
+										<select style="margin-left:15px;" id ="tower_city" name = "cityid" onchange="tower_city_change()">
+											<optgroup label="选择城市">
+					                            <#list addPage.citys as city>
+					                            <option value="${city.cityid}" <#if city.cityid==addPage.tower.cityid>select="selected"</#if> >${city.cityname}</option>
+					                            </#list>
+											</optgroup>
+										</select>
+										<select id="tower_area" name="towerarea">
+											<optgroup label="选择地区">
+					                            <#list addPage.areas as area>
+					                            <option value="${area.id}" <#if area.id==addPage.tower.areaid>select="selected"</#if> >${area.areaname}</option>
+					                            </#list>
+											</optgroup>
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="auto-style4">详细地址：</td>
+							<td class="auto-style8"><input id="toweraddress" class="dfinput" name="toweraddress" value="${addPage.tower.toweraddress}">
+							</td>
+							<td class="auto-style5">站址级别：</td>
+							<td class="auto-style21"><select id="towerlevel" name="towerlevel">
+									<optgroup label="选择站址级别">
+										<option value="1" <#if addPaget.tower.towerlevel==1>select="selected"</#if> >一级站址</option>
+										<option value="2" <#if addPaget.tower.towerlevel==2>select="selected"</#if>>二级站址</option>
+										<option value="3" <#if addPaget.tower.towerlevel==3>select="selected"</#if>>三级站址</option>
+										<option value="4" <#if addPaget.tower.towerlevel==4>select="selected"</#if>>四级站址</option>
+									</optgroup>
+							</select></td>
+						</tr>
+						<tr>
+							<td class="auto-style4">运营商需求：</td>
+							<td class="auto-style8"><input type="text" id="towerwho" name = "towerwho" value="${addPage.tower.towerwho}"
+								class="dfinput"></td>
+							<td rowspan="2" class="auto-style5" >站址描述：</td>
+							<td rowspan="2" class="auto-style15">
+							<textarea class="auto-style16" cols="" rows="" id="towerinfo" name="towerinfo" >${addPage.tower.towerinfo}</textarea>
+							<!-- 
+							<input type="text" id="towerinfo" name="towerinfo"
+								class="dfinput">
+								 -->
+							</td>
+						</tr>
+						<tr>
+							<td class="auto-style4">谈址费（元）：</td>
+							<td class="auto-style10"><input type="text" id="towerfee" name="towerfee" value="${addPage.tower.towerfee}"
+								class="dfinput">
+							</td>
+							<!-- 
+							<td class="auto-style4">谈单费：</td>
+							<td class="auto-style10"><input type="text" id="fee"
+								class="dfinput">
+							</td>
+							 -->
+							
+						<tr>
+							<td class="auto-style4">区域经理姓名：</td>
+							<td class="auto-style8"><input type="text" id="managername" name="managername" value="${addPage.tower.towermanagername}"
+								class="dfinput"></td>
+							<td class="auto-style5">经纬度：</td>
+							<td class="auto-style15"><input type="text" id="towerj" name="towerj" value="${addPage.tower.towerj}"
+								class="ddfinput"> 
+								<input type="text" id="towerw" name="towerw" value="${addPage.tower.towerw}"
+								class="ddfinput"></td>
+								<!-- 
+						    <td class="auto-style15"><input type="text" id="towerw" name="towerw"
+								class="dfinput"></td>
+								 -->
+						</tr>
+						<tr>
+							<td class="auto-style4">区域经理联系方式：</td>
+							<td class="auto-style8"><input type="text" id="managerphone" name="managerphone" value="${addPage.tower.towermanager}"
+								class="dfinput"></td>
+								<td class="auto-style4">站型：</td>
+							<td class="auto-style8"><select id="towertype" name="towertype">
+							
+							<optgroup label="选择站址类型">
+								 <#list addPage.towertypes as type>
+									<option value="${type.id}"  <#if addPage.tower.towertype==type.id >selected="selected"</#if> >${type.towertypename}</option>
+								</#list>
+							</optgroup>
+							</select></td>
+							
+						</tr>
+						<tr>
+							<td class="auto-style4">租用面积（m²）：</td>
+							<td class="auto-style8"><input type="text" id="towerlarge" name="towerlarge" value="${addPage.tower.towerlarge}"
+								class="dfinput"></td>
+								<td class="auto-style5">自定义编号：</td>
+							<td class="auto-style15"><input type="text" id="toweridefined" name="toweridefined"  value="${addPage.tower.toweridefined}"
+								class="dfinput"></td>
+							
+						</tr>
+						
+					</table>
+					 <div>                    
+                <div>&nbsp;&nbsp;</div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;                    
+                 <input type="button" onclick="updateTower()" class="btn" value="保存">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <input type="button" value="返回" onclick="javascript:history.go(-1)" class="btn">
+                    
+                </div>
+				</ul>
+
+			</div>
+			<input type="hidden" id="id" name="id" value="${addPage.tower.id}">
+			</form>
+
+
+			
+		</div>
+
+
+
+	</div>
+
+	<script type="text/javascript" src="../assets/js/jquery.js"></script>
+	<script type="text/javascript" src="../assets/js/jquery.idTabs.min.js"></script>
+	<script type="text/javascript" src="../assets/js/select-ui.min.js"></script>
+	<script type="text/javascript" src="../assets/editor/kindeditor.js"></script>
+	<script type="text/javascript" src="../assets/js/page/common/area.js"></script>
+	<script type="text/javascript" src="../assets/js/page/hbtower/tower.js"></script>
+	
+	<!-- Plugins JS-->
+	<script src="../assets/plugins/jquery-validation/js/jquery.validate.js"></script>
+	
+	<script type="text/javascript" src="../assets/plugins/sweetalert/js/sweetalert-dev.js"></script>
+
+	<script type="text/javascript">
+	    $("#usual1 ul").idTabs();
+    </script>
+
+	<script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+
+
+	<script type="text/javascript">
+       KE.show({
+           id: 'content7',
+           cssPath: './index.css'
+       });
+  </script>
+
+	<script type="text/javascript">
+    $(document).ready(function (e) {
+        $(".select1").uedSelect({
+            width: 167
+
+        });
+        $(".select2").uedSelect({
+            width: 100
+        });
+        $(".select3").uedSelect({
+            width: 100
+        });
+    });
+    
+</script>
+
+
+
+</body>
+</html>

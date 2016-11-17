@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.TowerShInfoMapper">
+<!-- 获取用户信息 -->
+	<select id="getShInfos" parameterType="int"
+		resultType="com.tower.common.bean.TowerShInfo">
+	   select 
+	   d.ID as id,
+	   d.Order_id as orderid,
+	   d.Order_user as orderuser,
+	   d.Order_name as ordername,
+	   d.Order_phone as orderphone,
+	   case d.Order_type
+	   when 0 then '用户'
+	   else p.Power_name
+	   end 
+	     as ordertypename,
+	    s.statename as orderstatename,
+		CONVERT(varchar,
+		d.Order_time, 120 ) as ordertime,
+		d.Order_sh_info as ordershinfo,
+		d.bz as bz
+		from tower_sh_doinfo d
+		left join tower_order_state s on s.state=d.Order_state
+		left join tower_power p on p.ID=d.Order_type
+		where Order_id=#{orderid}
+		order by Order_time desc
+		;
+	</select>
+	
+	<insert id="insertTowerShInfo" parameterType="com.tower.common.bean.TowerShInfo">
+	
+	insert into tower_sh_doinfo
+	(Order_id,Order_user,order_name,order_phone,Order_type,order_state,order_time,Order_sh_info)
+	values
+	(#{orderid},#{orderuser},#{ordername},#{orderphone},#{ordertype},#{orderstate},GETDATE(),#{ordershinfo})
+	
+	
+	</insert>
+
+</mapper>

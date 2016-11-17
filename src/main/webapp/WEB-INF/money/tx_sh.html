@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>提现申请审核</title>
+<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+ lable{
+   width: 205px;
+ }
+</style>
+</head>
+<body>
+  <div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">提现管理</a></li>
+    <li><a href="#">提现申请审核</a></li>
+          
+    </ul>
+  </div>
+
+<form id="form_money" method="post">
+    <div class="formbody">
+    
+    <div class="formtitle"><span>提现详细信息</span></div>
+    
+    <ul class="forminfo">
+    <div>
+     <img alt="" src="../assets/images/qiangdanrenxinxi.png">提现人信息
+        <div>提现编号: <label >${txPage.txrecord.txid}</label></div>
+        <table align="center" cellpadding="0" cellspacing="0" style="border:1px   solid #FEDCDC; width:100%; height: 75px;"  >
+            <tr>
+                <td style="border:1px   solid #FEDCDC; width:15%" >&nbsp;&nbsp; 下单人姓名：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.username}</label>
+                    <asp:Label ID="qname" runat="server" Width="205px"></asp:Label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 下单人手机号：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.usertele}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 下单人等级：</td>
+                <td  style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.levelname}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 下单人区域：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%" >
+                    &nbsp;&nbsp; <label>${txPage.txrecord.cityname}-${txPage.txrecord.areaname}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 所在单位：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.usercompany}</label>
+                </td>
+                 <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp;</td>
+                <td style="border:1px   solid #FEDCDC;width:15%">
+                 &nbsp;&nbsp; <label></label>
+                <!-- <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp;所属行业：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp;<label>${txPage.txrecord.userbusiness}</label>
+                </td> -->
+                 
+            </tr>
+            </table>
+    <div>&nbsp;&nbsp;</div> 
+        <div>
+         <img alt="" src="../assets/images/dingdanxinxi.png">
+            费用信息：</div>
+         <table align="center" cellpadding="0" cellspacing="0" style="border:1px   solid #FEDCDC; width:100%; height: 50px;"  >
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%"  Width="205px">&nbsp;&nbsp; 未生成金额：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                      &nbsp;&nbsp; <label>${txPage.txrecord.gettingnow}</label>
+                </td>
+           
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 可提现金额：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%" >
+                   &nbsp;&nbsp; <label>${txPage.txrecord.getnow}</label>
+                </td>
+                 </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 已提现金额：</td>
+                <td  style="border:1px   solid #FEDCDC;">
+                   &nbsp;&nbsp; <label>${txPage.txrecord.allgeting}</label>
+                </td>
+                  <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; </td>
+                <td  style="border:1px   solid #FEDCDC;">
+                   &nbsp;&nbsp; <label></label>
+                </td>
+            </tr>
+            </table>
+         <div>&nbsp;</div> 
+        <div>
+            <img alt="" src="../assets/images/zhanzhixinxi.png">
+            提现信息：</div>
+        <table align="center" cellpadding="0" cellspacing="0" style="border:1px   solid #FEDCDC; width:100%; height: 200px;"  >
+            <tr>
+                <td style="border:1px   solid #FEDCDC; width:15%" >&nbsp;&nbsp; 提现姓名：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%">
+                        &nbsp;&nbsp; <label>${txPage.txrecord.bankaccount}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 提现银行：</td>
+                <td  style="border:1px   solid #FEDCDC;width:25%">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.bankname}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 提现开户行：</td>
+                <td style="border:1px   solid #FEDCDC;width:25%" >
+                    &nbsp;&nbsp; <label>${txPage.txrecord.bankopen}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%" >&nbsp;&nbsp; 提现卡号：</td>
+                <td  style="border:1px   solid #FEDCDC;">
+                    &nbsp;&nbsp; <label>${txPage.txrecord.bankcardid}</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 提现金额：</td>
+                <td style="border:1px   solid #FEDCDC;">
+                 &nbsp;&nbsp; <label>${txPage.txrecord.fee}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 状态：</td>
+                <td style="border:1px   solid #FEDCDC;width:15%">
+                 &nbsp;&nbsp; <label>${txPage.txrecord.statename}</label>
+                     
+                </td>
+                 
+            </tr>
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 申请时间:</td>
+                <td style="border:1px   solid #FEDCDC;">
+                 &nbsp;&nbsp; <label>${txPage.txrecord.adddate}</label>
+                </td>
+                <td style="border:1px   solid #FEDCDC;width:15%"> </td>
+                <td >
+                     
+                </td>
+            </tr>
+            <#if txPage.txrecord.state==0 >
+            <tr>
+                <td style="border:1px   solid #FEDCDC;width:15%">&nbsp;&nbsp; 审核信息:</td>
+                <td style="border: 1px solid #FEDCDC;" colspan="3">
+					&nbsp;&nbsp; <textarea id="shinfo" rows="5" cols="50"
+						style="border: 1px solid #FEDCDC; margin-top: 2px"></textarea>
+				</td>
+            </tr>
+            </#if>
+            </table>
+            <div>&nbsp;</div> 
+        <div>
+        <img alt="" src="../assets/images/rizhi.png">
+            金额信息</div>
+            
+            <#if (txPage.txrecord.txsources)?size!=0 >
+            <table class="tablelist" style="border:1px   solid #FEDCDC; width:100%;center;margin-top: 2px" >
+            <thead>
+            <tr>
+            	<th>订单编号</th>
+            	<th>站址编号</th>
+            	<th>站址名称</th>
+            	<th>城市</th>
+           		<th>地区</th>
+           		<th>金额</th>
+            	<th>付款时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list txPage.txrecord.txsources as txsource>
+            <tr>
+          <td style="border:1px   solid #FEDCDC;">
+            	
+            	<#if txsource.isarea!=0>
+            	<a href="../order/order_info.html?orderid=${txsource.orderidid}">${txsource.orderid}</a>
+            	<#else>
+            	${txsource.orderid}
+            	</#if>
+            	</td>
+            	<td style="border:1px   solid #FEDCDC;">${txsource.towerid}</td>
+            	<td style="border:1px   solid #FEDCDC;">${txsource.towername}</td>
+           		<td style="border:1px   solid #FEDCDC;">${txsource.cityname}</td>
+           	 	<td style="border:1px   solid #FEDCDC;">${txsource.areaname}</td>
+            	<td style="border:1px   solid #FEDCDC;">${txsource.fee}</td>
+            	<td style="border:1px   solid #FEDCDC;">${txsource.paytime}</td>
+            </tr>
+            </#list>
+             
+            </tbody>
+            
+            </table>
+            </#if>
+           <div>&nbsp;</div> 
+             <#if (txPage.txrecord.txdoinfos)?size!=0 >
+        <div>
+        <img alt="" src="../assets/images/rizhi.png">
+            日志</div>
+            
+          
+            <table class="tablelist" style="border:1px   solid #FEDCDC; width:100%;center;margin-top: 2px" >
+            <thead>
+            <tr>
+            	<th>操作人</th>
+            	<th>操作人电话</th>
+            	<th>操作人类型</th>
+            	<th>当前状态</th>
+           		<th>操作时间</th>
+            	<th>审核信息</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list txPage.txrecord.txdoinfos as doinfo>
+            <tr>
+            	<td style="border:1px   solid #FEDCDC;">${doinfo.dousername}</td>
+            	<td style="border:1px   solid #FEDCDC;">${doinfo.dousertele}</td>
+            	<td style="border:1px   solid #FEDCDC;">${doinfo.usertypename}</td>
+           		<td style="border:1px   solid #FEDCDC;">${doinfo.nowstatename}</td>
+           	 	<td style="border:1px   solid #FEDCDC;">${doinfo.dodate}</td>
+            	<td style="border:1px   solid #FEDCDC;">${doinfo.shinfo}</td>
+            </tr>
+            </#list>
+             
+            </tbody>
+            
+            </table>
+            
+
+        <div>      
+        </#if>              
+                <div>&nbsp;&nbsp;</div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;                    
+                   <#if txPage.txrecord.state==0 >
+                   <input type="button" value="审核通过" onclick="tx_sh('${txPage.txrecord.txid}',1,${txPage.txrecord.fee})"  class="btn">
+                   <input type="button" value="审核拒绝" onclick="tx_sh('${txPage.txrecord.txid}',2,${txPage.txrecord.fee})"  class="btn">
+                   </#if>
+                   <input type="button" value="返回" onclick="javascript:window.location.href='tx.html'"  class="btn">
+                </div>
+    </ul>
+    </div>
+</form>
+<script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript" src="../assets/js/page/money/money.js"></script>
+</body>
+</html>

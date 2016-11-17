@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.MessageMapper">
+
+	<select id="getMessages" parameterType="com.tower.common.bean.MessagePage"
+							resultType="com.tower.common.bean.Message">
+	  select * from (select *,ROW_NUMBER() OVER (ORDER BY messagetime desc) as rank from
+	  (
+	  select a.ID as id,
+	  (case when len( a.title )>30 then left ( a.title ,27)+'...'
+	    else  a.title 
+	    end ) as title,
+	  (case when datalength( a.content )>50 then substring ( a.content,0 ,47)+'...'
+	    else  a.content 
+	   end ) as content,
+	   a.messager as messager,
+			 b.Admin_name as messagername,
+	         c.Power_name as powername,
+	         CONVERT(varchar, a.messagetime,120) as messagetime
+	    from tower_message a
+		LEFT JOIN tower_admin b on a.messager = b.id
+	    LEFT JOIN tower_power c on b.Admin_power = c.id
+	    where 1=1
+	    <if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and b.Admin_name like '%${queryItem.adminName}%'
+		</if>
+		<if test="queryItem.adminPower!=null and queryItem.adminPower!=0 ">
+			and b.Admin_power = #{queryItem.adminPower}
+		</if>
+		<if
+			test="queryItem.timestart!=null and queryItem.timestart!=''">
+			and a.messagetime >=#{queryItem.timestart}
+		</if>
+		<if test="queryItem.timeend!=null and queryItem.timeend!=''">
+			and DATEADD(day,-1,a.messagetime) <![CDATA[ <= ]]>
+			#{queryItem.timeend}
+		</if>
+	  ) w1)as tm where tm.rank between #{pageNo}*10-9 and #{pageNo}*10;
+	</select>
+	
+	<select id="getMessagesCount" parameterType="com.tower.common.bean.MessagePage" resultType="int">
+	  select count(1)
+	    from tower_message a
+		LEFT JOIN tower_admin b on a.messager = b.id
+	    LEFT JOIN tower_power c on b.Admin_power = c.id
+	    where 1=1
+	    <if test="queryItem.adminName!=null and queryItem.adminName!='' ">
+			and a.Admin_name like '%${queryItem.adminName}%'
+		</if>
+		<if test="queryItem.adminPower!=null and queryItem.adminPower!=0 ">
+			and a.Admin_power = #{queryItem.adminPower}
+		</if>
+		<if
+			test="queryItem.timestart!=null and queryItem.timestart!=''">
+			and a.messagetime >=#{queryItem.timestart}
+		</if>
+		<if test="queryItem.timeend!=null and queryItem.timeend!=''">
+			and a.messagetime <![CDATA[ <= ]]>
+			#{queryItem.timeend}
+		</if>
+	</select>
+	
+	<select id="getMessage" parameterType="int"
+		resultType="com.tower.common.bean.Message">
+		select
+		a.id as id,
+		a.title as title,
+		a.content as content,
+		b.Admin_name as messagername,
+	    CONVERT(varchar, a.messagetime,120) as messagetime
+		from tower_message a
+		LEFT JOIN tower_admin b on a.messager = b.id
+		where
+		a.ID = #{ID}
+	</select>
+	
+	<update id="changeMessage" parameterType="map">
+		update tower_message
+		set title=#{title},
+		content=#{content},
+		messagetime=GETDATE()
+		where ID = #{id};
+	</update>
+	
+	<insert id="addMessage" parameterType="map">
+		insert into tower_message
+		(title,content,messager,messagetime,url)
+		values
+		(#{title},#{content},#{messager},GETDATE(),#{url})
+	</insert>
+	
+	<delete id="delMessage" parameterType="map">
+		delete from tower_message
+		where ID = #{id};
+	</delete>
+	
+</mapper>

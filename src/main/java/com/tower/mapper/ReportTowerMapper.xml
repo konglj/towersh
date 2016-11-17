@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tower.mapper.ReportTowerMapper">
+	<select id="checkTowerExist" parameterType="int" resultType="int">
+		select count(1)
+		from data_report_tower
+		where Tower_id=#{towerid}
+	</select>
+
+	<insert id="insertTowerReport" parameterType="com.tower.common.bean.TowerReport">
+		insert into data_report_tower
+		(Tower_id,View_count,Sale_count,Cancel_count,Time_count,Reject_count,Con_reject_count)
+		values
+		(#{towerid},#{viewcount},#{salecount},#{cancelcount},#{timecount},#{rejectcount},#{conrejectcount})
+		;
+
+	</insert>
+	<update id="upateTowerReport" parameterType="com.tower.common.bean.TowerReport">
+		update data_report_tower
+		set
+		<if test="viewcount!=0">
+			View_count=View_count+1,
+		</if>
+		<if test="salecount!=0">
+			Sale_count=Sale_count+1,
+		</if>
+		<if test="cancelcount!=0">
+			Cancel_count=Cancel_count+1,
+		</if>
+		<if test="timecount!=0">
+			Time_count=Time_count+1,
+		</if>
+		<if test="rejectcount!=0">
+			Reject_count=Reject_count+1,
+		</if>
+		<if test="conrejectcount!=null">
+		Con_reject_count=Con_reject_count+#{conrejectcount},
+		</if>
+		Tower_id=#{towerid}
+		where Tower_id=#{towerid}
+		;
+		
+		
+	</update>
+</mapper>
